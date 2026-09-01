@@ -16,8 +16,11 @@ export function PersonaPicker({ personas, selectedId, onSelect }: Props) {
           onClick={() => onSelect(p)}
         >
           <span className="persona-emoji">{p.emoji}</span>
-          <span className="persona-title">{p.title}</span>
-          <span className="persona-subtitle">{p.subtitle}</span>
+          <span className="persona-text">
+            <span className="persona-title">{p.title}</span>
+            <span className="persona-sub">{p.subtitle}</span>
+          </span>
+          <span className="persona-go">→</span>
         </button>
       ))}
     </div>

@@ -25,7 +25,10 @@ export function ChatPanel() {
     } catch (err) {
       setMessages([
         ...next,
-        { role: "assistant", content: `出錯了：${err instanceof Error ? err.message : String(err)}` },
+        {
+          role: "assistant",
+          content: `出錯了：${err instanceof Error ? err.message : String(err)}`,
+        },
       ]);
     } finally {
       setLoading(false);
@@ -38,18 +41,18 @@ export function ChatPanel() {
         {messages.length === 0 && (
           <div className="chat-suggestions">
             {SUGGESTIONS.map((s) => (
-              <button key={s} className="chat-chip" onClick={() => send(s)}>
+              <button key={s} className="chip" onClick={() => send(s)}>
                 {s}
               </button>
             ))}
           </div>
         )}
         {messages.map((m, i) => (
-          <div key={i} className={`chat-bubble ${m.role}`}>
+          <div key={i} className={`bubble ${m.role}`}>
             {m.content}
           </div>
         ))}
-        {loading && <div className="chat-bubble assistant typing">AI 客服輸入中…</div>}
+        {loading && <div className="bubble assistant typing">AI 客服輸入中…</div>}
       </div>
 
       <form
