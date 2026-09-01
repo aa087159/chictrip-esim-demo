@@ -1,5 +1,5 @@
-import { getClient, hasApiKey, MODEL } from "./anthropic";
-import { CATALOG } from "./catalog";
+import { getClient, hasApiKey, MODEL } from "./anthropic.js";
+import { CATALOG } from "./catalog.js";
 
 export interface ChatMessage {
   role: "user" | "assistant";

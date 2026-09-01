@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { recommend } from "./_lib/recommend";
+import { recommend } from "./_lib/recommend.js";
 
 // Vercel serverless function. In local dev, vite.config.ts serves the same
 // logic via server.ssrLoadModule — this file is what runs in production.
