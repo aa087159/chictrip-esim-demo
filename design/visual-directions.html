@@ -1,0 +1,464 @@
+<title>去趣 eSIM 視覺方向</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700;900&family=Space+Mono:wght@400;700&display=swap">
+<style>
+  :root {
+    --bg: #f4f7fb;
+    --panel: #ffffff;
+    --panel-2: #eef2f8;
+    --ink: #161a23;
+    --ink-2: #59627a;
+    --line: #e5eaf2;
+    --accent: #089cf7;
+    --accent-ink: #0669ac;
+    --frame: #141922;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0e1118;
+      --panel: #161b24;
+      --panel-2: #1c222d;
+      --ink: #eef1f7;
+      --ink-2: #9aa3b3;
+      --line: #262d3a;
+      --accent: #3aa9f7;
+      --accent-ink: #8fd0ff;
+      --frame: #05070c;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0e1118;
+    --panel: #161b24;
+    --panel-2: #1c222d;
+    --ink: #eef1f7;
+    --ink-2: #9aa3b3;
+    --line: #262d3a;
+    --accent: #3aa9f7;
+    --accent-ink: #8fd0ff;
+    --frame: #05070c;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: Inter, "Noto Sans TC", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  .wrap { max-width: 1160px; margin: 0 auto; padding: 46px 24px 64px; }
+
+  /* Header */
+  .eyebrow {
+    font: 700 12px/1 "Space Mono", monospace;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--accent-ink);
+  }
+  h1.title {
+    font-family: Sora, "Noto Sans TC", sans-serif;
+    font-weight: 800;
+    font-size: clamp(28px, 4.6vw, 43px);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin: 14px 0 12px;
+    text-wrap: balance;
+  }
+  .lede { font-size: 16px; line-height: 1.7; color: var(--ink-2); max-width: 62ch; margin: 0; }
+  .lede b { color: var(--ink); font-weight: 600; }
+
+  .flow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    margin-top: 22px;
+    font-size: 13px;
+    color: var(--ink-2);
+  }
+  .flow-step {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 7px 13px;
+    font-weight: 500;
+  }
+  .flow-step b { color: var(--accent-ink); font-family: "Space Mono", monospace; margin-right: 5px; }
+  .flow-arrow { color: var(--ink-2); opacity: 0.5; }
+
+  /* Directions grid */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 22px;
+    margin-top: 38px;
+  }
+  .dir {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    padding: 18px 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    box-shadow: 0 1px 2px rgba(20, 26, 35, 0.04);
+    transition: transform 0.16s ease, box-shadow 0.16s ease;
+  }
+  .dir:hover { transform: translateY(-3px); box-shadow: 0 16px 38px rgba(20, 26, 35, 0.1); }
+
+  .dir-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+  .dir-key { font: 700 12px/1 "Space Mono", monospace; color: var(--ink-2); }
+  .dir-name { font-family: Sora, "Noto Sans TC", sans-serif; font-weight: 700; font-size: 18px; }
+  .dir-tagline { font-size: 13px; line-height: 1.5; color: var(--ink-2); margin: -8px 0 0; }
+
+  /* Phone frame — dark bezel reads as a real device on any theme/screen */
+  .phone {
+    background: var(--frame);
+    border-radius: 34px;
+    padding: 9px;
+    box-shadow: 0 22px 46px rgba(15, 20, 32, 0.28), inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+    align-self: center;
+    width: 100%;
+    max-width: 320px;
+  }
+  .screen {
+    background: var(--s-bg);
+    color: var(--s-ink);
+    font-family: var(--s-font);
+    border-radius: 26px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .s-topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 14px; border-bottom: 1px solid var(--s-line);
+  }
+  .s-logo { font-weight: 700; font-size: 13px; display: flex; align-items: center; gap: 7px; color: var(--s-ink); }
+  .s-logo i {
+    width: 20px; height: 20px; border-radius: 7px; background: var(--s-brand); color: #fff;
+    display: grid; place-items: center; font-size: 8px; font-style: normal; padding-left: 1px;
+  }
+  .s-logo b { color: var(--s-brand); }
+  .s-tag { font-size: 10px; font-weight: 700; color: var(--s-brand-ink); background: var(--s-brand-soft); padding: 3px 8px; border-radius: 999px; }
+
+  .s-body { padding: 14px; }
+  .s-step { display: flex; align-items: center; gap: 7px; font-size: 11.5px; font-weight: 700; color: var(--s-ink2); margin-bottom: 11px; }
+  .s-num { width: 17px; height: 17px; border-radius: 5px; background: var(--s-brand); color: #fff; display: grid; place-items: center; font-size: 10px; font-weight: 800; }
+
+  .s-card { background: var(--s-card); border-radius: var(--s-radius); padding: 15px; box-shadow: var(--s-shadow); }
+  .s-card-top { display: flex; justify-content: space-between; gap: 10px; align-items: flex-start; }
+  .s-meta { font-size: 11px; color: var(--s-ink2); }
+  .s-name { font-size: 16px; font-weight: 800; margin-top: 2px; letter-spacing: -0.01em; }
+  .s-hl { display: inline-block; margin-top: 7px; font-size: 10.5px; font-weight: 700; color: var(--s-accent-ink); background: var(--s-accent-soft); padding: 3px 9px; border-radius: 999px; }
+  .s-price { text-align: right; white-space: nowrap; }
+  .s-price b { font-size: 17px; font-weight: 800; color: var(--s-ink); }
+  .s-price small { font-size: 10px; color: var(--s-ink2); margin-left: 1px; }
+
+  .s-stats { display: flex; gap: 6px; margin: 12px 0; flex-wrap: wrap; }
+  .s-pill { font-size: 10.5px; font-weight: 700; padding: 5px 9px; border-radius: 9px; }
+  .s-pill.data { background: var(--s-brand-soft); color: var(--s-brand-ink); }
+  .s-pill.pts { background: var(--s-accent-soft); color: var(--s-accent-ink); }
+
+  .s-reason { font-size: 11.5px; line-height: 1.6; color: var(--s-ink); background: var(--s-surface); border-radius: 11px; padding: 9px 11px 9px 13px; border-left: 3px solid var(--s-brand); margin: 0; }
+
+  .s-flow-h { font-size: 10px; font-weight: 700; color: var(--s-ink2); margin: 13px 0 8px; }
+  .s-bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 10px; color: var(--s-ink2); }
+  .s-bl { width: 50px; flex: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .s-bar { flex: 1; height: 6px; background: var(--s-surface); border-radius: 999px; overflow: hidden; }
+  .s-bar i { display: block; height: 100%; background: var(--s-brand); border-radius: 999px; }
+
+  .s-cta { margin-top: 13px; text-align: center; padding: 11px; border-radius: 12px; background: var(--s-brand); color: #fff; font-size: 13px; font-weight: 800; box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12); }
+
+  /* Spec sheet */
+  .spec { display: flex; flex-direction: column; gap: 13px; }
+  .swatches { display: flex; gap: 6px; }
+  .sw { width: 28px; height: 28px; border-radius: 8px; box-shadow: inset 0 0 0 1px rgba(20, 26, 35, 0.12); }
+  .spec-block { display: flex; flex-direction: column; gap: 4px; }
+  .spec-label { font: 700 10px/1 "Space Mono", monospace; letter-spacing: 1.5px; text-transform: uppercase; color: var(--ink-2); }
+  .spec-val { font-size: 13px; line-height: 1.5; color: var(--ink); }
+  .spec-val.mono { font-family: "Space Mono", monospace; font-size: 11.5px; color: var(--ink-2); }
+  .spec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .tag-good, .tag-risk { font-size: 12.5px; line-height: 1.5; }
+  .tag-good b, .tag-risk b { display: block; font: 700 10px/1.4 "Space Mono", monospace; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 3px; }
+  .tag-good b { color: #17a673; }
+  .tag-risk b { color: #d98324; }
+  .tag-good, .tag-risk { color: var(--ink-2); }
+
+  footer { margin-top: 40px; padding-top: 22px; border-top: 1px solid var(--line); color: var(--ink-2); font-size: 13.5px; line-height: 1.7; }
+  footer b { color: var(--ink); }
+
+  /* Direction A — 去趣品牌藍 */
+  .dir-a .screen {
+    --s-bg: #f6f8fb; --s-card: #fff; --s-ink: #1c202b; --s-ink2: rgba(28,32,43,.6);
+    --s-brand: #089cf7; --s-brand-soft: #e7f4fe; --s-brand-ink: #0577c2;
+    --s-accent: #f5a623; --s-accent-soft: #fff4e2; --s-accent-ink: #b9740a;
+    --s-surface: #f2f4f8; --s-line: #e7ecf3; --s-radius: 16px;
+    --s-font: Inter, "Noto Sans TC", sans-serif; --s-shadow: 0 10px 24px rgba(8,156,247,.14);
+  }
+
+  /* Direction B — AI 科技夜色 */
+  .dir-b .screen {
+    --s-bg: radial-gradient(125% 80% at 50% -12%, #17233f 0%, #0a0e18 62%);
+    --s-card: rgba(255,255,255,.055); --s-ink: #eaf0fb; --s-ink2: rgba(234,240,251,.6);
+    --s-brand: #4aa8ff; --s-brand-soft: rgba(74,168,255,.16); --s-brand-ink: #9cccff;
+    --s-accent: #ffb454; --s-accent-soft: rgba(255,180,84,.15); --s-accent-ink: #ffcf94;
+    --s-surface: rgba(255,255,255,.07); --s-line: rgba(255,255,255,.1); --s-radius: 16px;
+    --s-font: Inter, "Noto Sans TC", sans-serif; --s-shadow: 0 14px 36px rgba(74,168,255,.26);
+  }
+  .dir-b .s-card { border: 1px solid rgba(255,255,255,.12); backdrop-filter: blur(4px); }
+  .dir-b .s-cta { background: linear-gradient(95deg, #4aa8ff, #7c5cff); box-shadow: 0 10px 26px rgba(96,110,255,.45); }
+  .dir-b .s-bar i { background: linear-gradient(90deg, #4aa8ff, #7c5cff); }
+  .dir-b .s-name { text-shadow: 0 0 18px rgba(74,168,255,.35); }
+
+  /* Direction C — 旅行暖感 / 活潑 */
+  .dir-c .screen {
+    --s-bg: #fff6ec; --s-card: #ffffff; --s-ink: #2a1f16; --s-ink2: rgba(42,31,22,.58);
+    --s-brand: #ff6b57; --s-brand-soft: #ffe5df; --s-brand-ink: #d5402a;
+    --s-accent: #12a594; --s-accent-soft: #d6f4ef; --s-accent-ink: #0b7d70;
+    --s-surface: #fdeede; --s-line: #f2e0cd; --s-radius: 18px;
+    --s-font: Inter, "Noto Sans TC", sans-serif; --s-shadow: 0 12px 24px rgba(255,107,87,.18);
+  }
+  .dir-c .s-card { border: 2px solid #2a1f16; box-shadow: 5px 6px 0 rgba(42,31,22,.14); }
+  .dir-c .s-cta { background: #ff6b57; border: 2px solid #2a1f16; box-shadow: 3px 4px 0 rgba(42,31,22,.82); }
+  .dir-c .s-hl { border: 1.5px solid var(--s-accent-ink); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .dir { opacity: 0; transform: translateY(12px); animation: rise 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+    .dir:nth-child(2) { animation-delay: 0.09s; }
+    .dir:nth-child(3) { animation-delay: 0.18s; }
+    @keyframes rise { to { opacity: 1; transform: none; } }
+  }
+
+  @media (max-width: 520px) {
+    .wrap { padding: 34px 16px 48px; }
+    .spec-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">視覺方向 · 給組員討論</div>
+    <h1 class="title">去趣 eSIM AI 上網管家 · 三個視覺方向</h1>
+    <p class="lede">同一個「<b>方案卡揭曉</b>」畫面，三種風格並排。內容完全一樣，差別只在視覺——方便大家直接比較。挑一個、或融合幾個的優點，把回饋丟給我，我照選定方向實作到程式。</p>
+    <div class="flow">
+      <span class="flow-step"><b>1</b>各自看</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step"><b>2</b>回饋 / 投票</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step"><b>3</b>AI 彙整</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step"><b>4</b>照 plan 實作</span>
+    </div>
+  </header>
+
+  <div class="grid">
+    <!-- Direction A -->
+    <section class="dir dir-a">
+      <div>
+        <div class="dir-head">
+          <span class="dir-name">品牌藍（現行）</span>
+          <span class="dir-key">A</span>
+        </div>
+        <p class="dir-tagline">乾淨明亮，像能直接塞進去趣 App</p>
+      </div>
+      <div class="phone">
+        <div class="screen">
+          <div class="s-topbar">
+            <span class="s-logo"><i>▶</i>去趣 <b>eSIM</b></span>
+            <span class="s-tag">AI 上網管家</span>
+          </div>
+          <div class="s-body">
+            <div class="s-step"><span class="s-num">2</span>專屬方案推薦</div>
+            <div class="s-card">
+              <div class="s-card-top">
+                <div>
+                  <div class="s-meta">🇯🇵 日本・5 天</div>
+                  <div class="s-name">日本 高速吃到飽</div>
+                  <span class="s-hl">✦ 不限流量，追劇導航都不怕</span>
+                </div>
+                <div class="s-price"><b>NT$399</b><small>起</small></div>
+              </div>
+              <div class="s-stats">
+                <span class="s-pill data">預估 ≈ 9GB</span>
+                <span class="s-pill pts">回饋 20 Points</span>
+              </div>
+              <p class="s-reason">你這趟東京 5 天會大量發 IG、用導航，預估約 9GB，這個方案最省心。</p>
+              <div class="s-flow-h">流量來源預估</div>
+              <div class="s-bar-row"><span class="s-bl">IG 限動</span><span class="s-bar"><i style="width:88%"></i></span></div>
+              <div class="s-bar-row"><span class="s-bl">導航</span><span class="s-bar"><i style="width:58%"></i></span></div>
+              <div class="s-bar-row"><span class="s-bl">查資料</span><span class="s-bar"><i style="width:30%"></i></span></div>
+              <div class="s-cta">一鍵下單</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="spec">
+        <div class="swatches">
+          <span class="sw" style="background:#089cf7"></span>
+          <span class="sw" style="background:#1c202b"></span>
+          <span class="sw" style="background:#f2f4f8"></span>
+          <span class="sw" style="background:#f5a623"></span>
+          <span class="sw" style="background:#ffffff"></span>
+        </div>
+        <div class="spec-block">
+          <span class="spec-label">Palette</span>
+          <span class="spec-val mono">#089CF7 藍 · #1C202B 墨 · #F2F4F8 灰 · #F5A623 橘</span>
+        </div>
+        <div class="spec-block">
+          <span class="spec-label">Type</span>
+          <span class="spec-val">Inter + Noto Sans TC</span>
+        </div>
+        <div class="spec-block">
+          <span class="spec-label">調性</span>
+          <span class="spec-val">清爽、可信、產品感</span>
+        </div>
+        <div class="spec-grid">
+          <div class="tag-good"><b>適合</b>強調「能上線的真產品」，與去趣現有品牌一致</div>
+          <div class="tag-risk"><b>風險</b>相對安全、驚喜感較低</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Direction B -->
+    <section class="dir dir-b">
+      <div>
+        <div class="dir-head">
+          <span class="dir-name">AI 科技夜色</span>
+          <span class="dir-key">B</span>
+        </div>
+        <p class="dir-tagline">深色 + 漸層光暈，主打 GenAI 未來感</p>
+      </div>
+      <div class="phone">
+        <div class="screen">
+          <div class="s-topbar">
+            <span class="s-logo"><i>▶</i>去趣 <b>eSIM</b></span>
+            <span class="s-tag">AI 上網管家</span>
+          </div>
+          <div class="s-body">
+            <div class="s-step"><span class="s-num">2</span>專屬方案推薦</div>
+            <div class="s-card">
+              <div class="s-card-top">
+                <div>
+                  <div class="s-meta">🇯🇵 日本・5 天</div>
+                  <div class="s-name">日本 高速吃到飽</div>
+                  <span class="s-hl">✦ 不限流量，追劇導航都不怕</span>
+                </div>
+                <div class="s-price"><b>NT$399</b><small>起</small></div>
+              </div>
+              <div class="s-stats">
+                <span class="s-pill data">預估 ≈ 9GB</span>
+                <span class="s-pill pts">回饋 20 Points</span>
+              </div>
+              <p class="s-reason">你這趟東京 5 天會大量發 IG、用導航，預估約 9GB，這個方案最省心。</p>
+              <div class="s-flow-h">流量來源預估</div>
+              <div class="s-bar-row"><span class="s-bl">IG 限動</span><span class="s-bar"><i style="width:88%"></i></span></div>
+              <div class="s-bar-row"><span class="s-bl">導航</span><span class="s-bar"><i style="width:58%"></i></span></div>
+              <div class="s-bar-row"><span class="s-bl">查資料</span><span class="s-bar"><i style="width:30%"></i></span></div>
+              <div class="s-cta">一鍵下單</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="spec">
+        <div class="swatches">
+          <span class="sw" style="background:#0a0e18"></span>
+          <span class="sw" style="background:#4aa8ff"></span>
+          <span class="sw" style="background:#7c5cff"></span>
+          <span class="sw" style="background:#ffb454"></span>
+          <span class="sw" style="background:#eaf0fb"></span>
+        </div>
+        <div class="spec-block">
+          <span class="spec-label">Palette</span>
+          <span class="spec-val mono">#0A0E18 夜 · #4AA8FF→#7C5CFF 漸層 · #FFB454 暖點</span>
+        </div>
+        <div class="spec-block">
+          <span class="spec-label">Type</span>
+          <span class="spec-val">Inter + Noto Sans TC（標題可換更幾何字）</span>
+        </div>
+        <div class="spec-block">
+          <span class="spec-label">調性</span>
+          <span class="spec-val">前衛、聚焦、科技</span>
+        </div>
+        <div class="spec-grid">
+          <div class="tag-good"><b>適合</b>想強調「這是 AI」、舞台上吸睛</div>
+          <div class="tag-risk"><b>風險</b>與去趣現有明亮品牌落差大</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Direction C -->
+    <section class="dir dir-c">
+      <div>
+        <div class="dir-head">
+          <span class="dir-name">旅行暖感 / 活潑</span>
+          <span class="dir-key">C</span>
+        </div>
+        <p class="dir-tagline">暖色 + 撞色 + 粗框，年輕旅客的雜誌感</p>
+      </div>
+      <div class="phone">
+        <div class="screen">
+          <div class="s-topbar">
+            <span class="s-logo"><i>▶</i>去趣 <b>eSIM</b></span>
+            <span class="s-tag">AI 上網管家</span>
+          </div>
+          <div class="s-body">
+            <div class="s-step"><span class="s-num">2</span>專屬方案推薦</div>
+            <div class="s-card">
+              <div class="s-card-top">
+                <div>
+                  <div class="s-meta">🇯🇵 日本・5 天</div>
+                  <div class="s-name">日本 高速吃到飽</div>
+                  <span class="s-hl">✦ 不限流量，追劇導航都不怕</span>
+                </div>
+                <div class="s-price"><b>NT$399</b><small>起</small></div>
+              </div>
+              <div class="s-stats">
+                <span class="s-pill data">預估 ≈ 9GB</span>
+                <span class="s-pill pts">回饋 20 Points</span>
+              </div>
+              <p class="s-reason">你這趟東京 5 天會大量發 IG、用導航，預估約 9GB，這個方案最省心。</p>
+              <div class="s-flow-h">流量來源預估</div>
+              <div class="s-bar-row"><span class="s-bl">IG 限動</span><span class="s-bar"><i style="width:88%"></i></span></div>
+              <div class="s-bar-row"><span class="s-bl">導航</span><span class="s-bar"><i style="width:58%"></i></span></div>
+              <div class="s-bar-row"><span class="s-bl">查資料</span><span class="s-bar"><i style="width:30%"></i></span></div>
+              <div class="s-cta">一鍵下單</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="spec">
+        <div class="swatches">
+          <span class="sw" style="background:#fff6ec"></span>
+          <span class="sw" style="background:#ff6b57"></span>
+          <span class="sw" style="background:#12a594"></span>
+          <span class="sw" style="background:#2a1f16"></span>
+          <span class="sw" style="background:#ffffff"></span>
+        </div>
+        <div class="spec-block">
+          <span class="spec-label">Palette</span>
+          <span class="spec-val mono">#FFF6EC 奶油 · #FF6B57 珊瑚 · #12A594 湖綠 · #2A1F16 墨</span>
+        </div>
+        <div class="spec-block">
+          <span class="spec-label">Type</span>
+          <span class="spec-val">Inter + Noto Sans TC（可換圓潤字）</span>
+        </div>
+        <div class="spec-block">
+          <span class="spec-label">調性</span>
+          <span class="spec-val">活潑、親切、有記憶點</span>
+        </div>
+        <div class="spec-grid">
+          <div class="tag-good"><b>適合</b>對準愛拍照發 IG 的年輕族群</div>
+          <div class="tag-risk"><b>風險</b>偏離去趣調性、較不「工具感」</div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    三張都是<b>同一個畫面、相同內容</b>，只有視覺不同。回饋方式：直接說「<b>要 A</b>」、或「<b>A 的版面 + B 的配色</b>」這樣融合都可以——把大家意見匯整後給我，我就照選定方向做進真實程式。
+  </footer>
+</div>
