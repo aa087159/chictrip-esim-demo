@@ -2,9 +2,9 @@ import { useState } from "react";
 import { postChat, type ChatMessage } from "../lib/api";
 
 const SUGGESTIONS = [
-  "我的手機是 iPhone 12，可以用嗎？",
-  "eSIM 什麼時候開通？落地沒網怎麼辦？",
-  "去中國能用 Line 和 Google 嗎？",
+  "我 iPhone 13 mini 能用嗎？",
+  "落地要自己設定嗎？會不會下飛機就沒網？",
+  "3 個人可以一起開通嗎？開不了怎麼辦？",
 ];
 
 export function ChatPanel() {

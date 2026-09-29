@@ -22,9 +22,47 @@ const RecommendationSchema = z.object({
   upsellHint: z.string().optional().describe("可選的加購或升級提示"),
 });
 
-export type Recommendation = z.infer<typeof RecommendationSchema> & {
+type RawRecommendation = z.infer<typeof RecommendationSchema>;
+
+export type Recommendation = RawRecommendation & {
   plan: Plan | null;
+  // 該國所有適用方案，依推薦度排序（最推薦在最前）。
+  plans: Plan[];
 };
+
+// A plan's usable capacity in GB across the whole trip. Unlimited = Infinity.
+function capacityGB(plan: Plan, days: number): number {
+  if (plan.type === "unlimited") return Infinity;
+  if (plan.type === "daily") return (plan.dailyGB ?? 0) * days;
+  return plan.dataGB ?? 0;
+}
+
+// Rank the country's plans by fit to the estimate, with the recommended one
+// pinned first. "Enough capacity, closest above" ranks highest; falling short
+// is penalised hard, so under-sized plans sink to the bottom.
+function rankPlans(itinerary: Itinerary, out: RawRecommendation): Plan[] {
+  const plans = plansByCountry(itinerary.countryCode);
+  const est = out.estimatedDataGB;
+  const fit = (plan: Plan): number => {
+    const cap = capacityGB(plan, itinerary.days);
+    if (cap === Infinity) return 1000;
+    if (cap >= est) return 500 - (cap - est);
+    return -(est - cap) * 10;
+  };
+  const rest = plans
+    .filter((p) => p.id !== out.recommendedPlanId)
+    .sort((a, b) => fit(b) - fit(a));
+  const recommended = planById(out.recommendedPlanId);
+  return [recommended, ...rest].filter((p): p is Plan => p !== null);
+}
+
+function finalize(out: RawRecommendation, itinerary: Itinerary): Recommendation {
+  return {
+    ...out,
+    plan: planById(out.recommendedPlanId),
+    plans: rankPlans(itinerary, out),
+  };
+}
 
 function systemPrompt(countryCode: string): string {
   const plans = plansByCountry(countryCode);
@@ -54,7 +92,7 @@ export async function recommend(itinerary: Itinerary): Promise<Recommendation> {
 
   const out = res.parsed_output;
   if (!out) throw new Error("推薦結果解析失敗");
-  return { ...out, plan: planById(out.recommendedPlanId) };
+  return finalize(out, itinerary);
 }
 
 // ---- Mock fallback (used when ANTHROPIC_API_KEY is absent) ----
@@ -103,12 +141,17 @@ function mockRecommend(itinerary: Itinerary): Recommendation {
       ? `你去${itinerary.destination}${itinerary.days}天，要用 Line 和 Google，這款免翻牆方案可直連常用 App，落地就能用，不用另外設定 VPN。`
       : `你這趟${itinerary.destination}${itinerary.days}天，${heavy ? "又會大量拍照發 IG、用導航" : "用量中等"}，預估約 ${estimatedDataGB}GB，推薦這個方案最省心。`;
 
-  return {
-    recommendedPlanId: plan?.id ?? "",
-    estimatedDataGB,
-    reasoning,
-    breakdown,
-    upsellHint: heavy ? "行程偏重度使用，升級吃到飽可完全免流量焦慮。" : undefined,
-    plan,
-  };
+  return finalize(
+    {
+      recommendedPlanId: plan?.id ?? "",
+      estimatedDataGB,
+      reasoning,
+      breakdown,
+      upsellHint:
+        heavy && plan?.type !== "unlimited"
+          ? "行程偏重度使用，升級吃到飽可完全免流量焦慮。"
+          : undefined,
+    },
+    itinerary,
+  );
 }

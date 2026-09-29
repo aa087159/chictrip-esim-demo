@@ -1,0 +1,304 @@
+<title>上網管家 Demo 腳本</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700;900&family=Space+Mono:wght@400;700&display=swap">
+<style>
+  :root {
+    --bg: #f4f7fb;
+    --panel: #ffffff;
+    --ink: #161a23;
+    --ink-2: #59627a;
+    --line: #e5eaf2;
+    --accent: #089cf7;
+    --accent-ink: #0669ac;
+    --frame: #141922;
+    --new: #12a594;
+    --new-soft: #d8f3ee;
+    /* Phone screen palette — Direction A（品牌藍），畫面內固定亮色,像真的去趣 App */
+    --s-bg: #f6f8fb; --s-card: #fff; --s-ink: #1c202b; --s-ink2: rgba(28,32,43,.6);
+    --s-brand: #089cf7; --s-brand-soft: #e7f4fe; --s-brand-ink: #0577c2;
+    --s-accent-soft: #fff4e2; --s-accent-ink: #b9740a;
+    --s-good: #17a673; --s-good-soft: #dff4ec;
+    --s-surface: #f2f4f8; --s-line: #e7ecf3;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0e1118; --panel: #161b24; --ink: #eef1f7; --ink-2: #9aa3b3;
+      --line: #262d3a; --accent: #3aa9f7; --accent-ink: #8fd0ff; --frame: #05070c;
+      --new: #3fccb6; --new-soft: rgba(63,204,182,.16);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0e1118; --panel: #161b24; --ink: #eef1f7; --ink-2: #9aa3b3;
+    --line: #262d3a; --accent: #3aa9f7; --accent-ink: #8fd0ff; --frame: #05070c;
+    --new: #3fccb6; --new-soft: rgba(63,204,182,.16);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: Inter, "Noto Sans TC", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 46px 24px 64px; }
+
+  .eyebrow { font: 700 12px/1 "Space Mono", monospace; letter-spacing: 2.5px; text-transform: uppercase; color: var(--accent-ink); }
+  h1.title {
+    font-family: Sora, "Noto Sans TC", sans-serif; font-weight: 800;
+    font-size: clamp(27px, 4.4vw, 41px); letter-spacing: -0.02em; line-height: 1.12;
+    margin: 14px 0 12px; text-wrap: balance;
+  }
+  .lede { font-size: 15.5px; line-height: 1.75; color: var(--ink-2); max-width: 70ch; margin: 0; }
+  .lede b { color: var(--ink); font-weight: 600; }
+
+  .flow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 22px; font-size: 13px; color: var(--ink-2); }
+  .flow-step { background: var(--panel); border: 1px solid var(--line); border-radius: 999px; padding: 7px 13px; font-weight: 500; }
+  .flow-step b { color: var(--accent-ink); font-family: "Space Mono", monospace; margin-right: 6px; }
+  .flow-arrow { color: var(--ink-2); opacity: 0.5; }
+
+  .board { display: grid; grid-template-columns: repeat(auto-fit, minmax(258px, 1fr)); gap: 20px; margin-top: 40px; align-items: start; }
+  .beat { display: flex; flex-direction: column; gap: 15px; }
+  .beat-head { display: flex; align-items: baseline; gap: 9px; }
+  .beat-num { font: 800 12px/1 "Space Mono", monospace; color: #fff; background: var(--accent); width: 22px; height: 22px; border-radius: 7px; display: grid; place-items: center; flex: none; }
+  .beat-name { font-family: Sora, "Noto Sans TC", sans-serif; font-weight: 700; font-size: 16px; letter-spacing: -0.01em; }
+  .beat-new { font: 700 9.5px/1 "Space Mono", monospace; letter-spacing: 1px; color: var(--new); background: var(--new-soft); padding: 4px 7px; border-radius: 6px; margin-left: auto; align-self: center; }
+
+  /* Phone */
+  .phone { background: var(--frame); border-radius: 34px; padding: 8px; box-shadow: 0 20px 42px rgba(15,20,32,.26), inset 0 0 0 1px rgba(255,255,255,.06); width: 100%; max-width: 300px; align-self: center; }
+  .screen { background: var(--s-bg); color: var(--s-ink); font-family: Inter, "Noto Sans TC", sans-serif; border-radius: 27px; overflow: hidden; display: flex; flex-direction: column; min-height: 452px; }
+
+  .s-topbar { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-bottom: 1px solid var(--s-line); background: var(--s-card); }
+  .s-logo { font-weight: 700; font-size: 13px; display: flex; align-items: center; gap: 7px; color: var(--s-ink); }
+  .s-logo i { width: 20px; height: 20px; border-radius: 7px; background: var(--s-brand); color: #fff; display: grid; place-items: center; font-size: 8px; font-style: normal; padding-left: 1px; }
+  .s-logo b { color: var(--s-brand); }
+  .s-tag { font-size: 10px; font-weight: 700; color: var(--s-brand-ink); background: var(--s-brand-soft); padding: 3px 8px; border-radius: 999px; }
+  .s-body { padding: 14px; display: flex; flex-direction: column; gap: 12px; flex: 1; }
+
+  /* Trip header (screen 1) */
+  .s-trip-flag { font-size: 11px; color: var(--s-ink2); font-weight: 700; }
+  .s-trip-title { font-size: 17px; font-weight: 800; letter-spacing: -0.01em; margin-top: 2px; }
+  .s-trip-meta { font-size: 10.5px; color: var(--s-ink2); margin-top: 3px; }
+  .s-days { display: flex; flex-direction: column; gap: 6px; }
+  .s-day { font-size: 11.5px; color: var(--s-ink); background: var(--s-surface); border-radius: 9px; padding: 8px 10px; }
+  .s-day b { font-family: "Space Mono", monospace; color: var(--s-brand-ink); margin-right: 7px; }
+  .s-day.s-muted { color: var(--s-ink2); }
+  .s-chapters { display: flex; gap: 6px; flex-wrap: wrap; }
+  .s-chip { font-size: 10.5px; font-weight: 700; padding: 5px 10px; border-radius: 999px; background: var(--s-surface); color: var(--s-ink2); }
+  .s-chip.done { color: var(--s-good); background: var(--s-good-soft); }
+  .s-chip.accent { color: var(--s-brand-ink); background: var(--s-brand-soft); }
+  .s-chip.gen { color: var(--s-brand-ink); background: var(--s-brand-soft); }
+  .s-gen { background: var(--s-card); border: 1px dashed var(--s-brand); border-radius: 14px; padding: 13px; display: flex; flex-direction: column; gap: 9px; }
+  .s-gen-row { font-size: 11.5px; font-weight: 700; color: var(--s-brand-ink); display: flex; align-items: center; gap: 8px; }
+  .s-spark { width: 13px; height: 13px; border-radius: 50%; background: var(--s-brand); box-shadow: 0 0 0 0 rgba(8,156,247,.5); animation: pulse 1.4s ease-out infinite; flex: none; }
+  .s-skel { height: 9px; border-radius: 999px; background: linear-gradient(90deg, var(--s-surface) 0%, #e2e8f1 50%, var(--s-surface) 100%); background-size: 200% 100%; animation: sheen 1.5s linear infinite; }
+  .s-skel.short { width: 62%; }
+
+  /* Recommendation section (screen 2) */
+  .s-section-h { font-size: 12px; font-weight: 800; color: var(--s-ink); display: flex; align-items: center; gap: 8px; }
+  .s-section-h .s-num { width: 18px; height: 18px; border-radius: 6px; background: var(--s-brand); color: #fff; display: grid; place-items: center; font-size: 12px; font-weight: 800; }
+  .s-card { background: var(--s-card); border-radius: 16px; padding: 14px; box-shadow: 0 10px 24px rgba(8,156,247,.13); }
+  .s-card-top { display: flex; justify-content: space-between; gap: 10px; align-items: flex-start; }
+  .s-meta { font-size: 10.5px; color: var(--s-ink2); }
+  .s-name { font-size: 16px; font-weight: 800; margin-top: 2px; letter-spacing: -0.01em; }
+  .s-hl { display: inline-block; margin-top: 7px; font-size: 10px; font-weight: 700; color: var(--s-accent-ink); background: var(--s-accent-soft); padding: 3px 9px; border-radius: 999px; }
+  .s-price { text-align: right; white-space: nowrap; }
+  .s-price b { font-size: 17px; font-weight: 800; color: var(--s-ink); }
+  .s-price small { font-size: 10px; color: var(--s-ink2); margin-left: 1px; }
+  .s-stats { display: flex; gap: 6px; margin: 11px 0; flex-wrap: wrap; }
+  .s-pill { font-size: 10.5px; font-weight: 700; padding: 5px 9px; border-radius: 9px; }
+  .s-pill.data { background: var(--s-brand-soft); color: var(--s-brand-ink); }
+  .s-pill.pts { background: var(--s-accent-soft); color: var(--s-accent-ink); }
+  .s-reason { font-size: 11.5px; line-height: 1.6; color: var(--s-ink); background: var(--s-surface); border-radius: 11px; padding: 9px 11px 9px 13px; border-left: 3px solid var(--s-brand); margin: 0; }
+  .s-flow-h { font-size: 10px; font-weight: 700; color: var(--s-ink2); margin: 12px 0 8px; }
+  .s-bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 10px; color: var(--s-ink2); }
+  .s-bl { width: 48px; flex: none; }
+  .s-bar { flex: 1; height: 6px; background: var(--s-surface); border-radius: 999px; overflow: hidden; }
+  .s-bar i { display: block; height: 100%; background: var(--s-brand); border-radius: 999px; }
+
+  /* Chat (screen 3) */
+  .s-chat { gap: 9px; }
+  .s-msg { font-size: 11.5px; line-height: 1.6; padding: 9px 11px; border-radius: 13px; max-width: 88%; }
+  .s-msg.ai { background: var(--s-card); color: var(--s-ink); border: 1px solid var(--s-line); align-self: flex-start; border-bottom-left-radius: 4px; }
+  .s-msg.me { background: var(--s-brand); color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
+  .s-msg.ai b { color: var(--s-good); }
+  .s-note { display: block; margin-top: 6px; font-size: 10.5px; color: var(--s-accent-ink); background: var(--s-accent-soft); border-radius: 8px; padding: 6px 8px; }
+  .s-inputbar { margin-top: auto; display: flex; align-items: center; justify-content: space-between; background: var(--s-card); border: 1px solid var(--s-line); border-radius: 999px; padding: 9px 12px; font-size: 11px; color: var(--s-ink2); }
+  .s-send { width: 22px; height: 22px; border-radius: 50%; background: var(--s-brand); color: #fff; display: grid; place-items: center; font-weight: 800; }
+
+  /* Group checkout (screen 4) */
+  .s-group-h { font-size: 12.5px; font-weight: 700; color: var(--s-ink); line-height: 1.5; }
+  .s-group-h b { color: var(--s-brand-ink); }
+  .s-cart { display: flex; flex-direction: column; gap: 1px; background: var(--s-line); border-radius: 12px; overflow: hidden; }
+  .s-cart-row { display: flex; align-items: center; gap: 9px; background: var(--s-card); padding: 10px 11px; font-size: 11.5px; }
+  .s-who { width: 34px; flex: none; font-weight: 800; color: var(--s-brand-ink); }
+  .s-what { flex: 1; color: var(--s-ink); }
+  .s-amt { font-family: "Space Mono", monospace; font-size: 11px; color: var(--s-ink2); font-variant-numeric: tabular-nums; }
+  .s-sum { display: flex; flex-direction: column; gap: 6px; padding: 4px 2px; }
+  .s-sum-row { display: flex; justify-content: space-between; font-size: 11.5px; color: var(--s-ink2); font-variant-numeric: tabular-nums; }
+  .s-sum-row.disc { color: var(--s-good); }
+  .s-sum-row.pts { color: var(--s-accent-ink); }
+  .s-sum-row.total { color: var(--s-ink); font-weight: 800; padding-top: 7px; border-top: 1px solid var(--s-line); }
+  .s-sum-row.total b { font-size: 16px; }
+  .s-cta { margin-top: 4px; text-align: center; padding: 12px; border-radius: 13px; background: var(--s-brand); color: #fff; font-size: 13.5px; font-weight: 800; box-shadow: 0 10px 22px rgba(8,156,247,.28); }
+
+  .beat-note { font-size: 12.5px; line-height: 1.65; color: var(--ink-2); }
+  .beat-note b { color: var(--ink); font-weight: 600; }
+  .beat-note .hi { color: var(--accent-ink); font-weight: 700; }
+
+  footer { margin-top: 44px; padding-top: 22px; border-top: 1px solid var(--line); color: var(--ink-2); font-size: 13.5px; line-height: 1.75; }
+  footer b { color: var(--ink); }
+  footer .cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 22px; margin-top: 4px; }
+  footer .lbl { font: 700 10px/1 "Space Mono", monospace; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent-ink); display: block; margin-bottom: 7px; }
+
+  @keyframes pulse { to { box-shadow: 0 0 0 9px rgba(8,156,247,0); } }
+  @keyframes sheen { to { background-position: -200% 0; } }
+  @media (prefers-reduced-motion: no-preference) {
+    .beat { opacity: 0; transform: translateY(12px); animation: rise .5s cubic-bezier(.2,.8,.2,1) forwards; }
+    .beat:nth-child(2) { animation-delay: .08s; }
+    .beat:nth-child(3) { animation-delay: .16s; }
+    .beat:nth-child(4) { animation-delay: .24s; }
+    @keyframes rise { to { opacity: 1; transform: none; } }
+  }
+  @media (max-width: 560px) { .wrap { padding: 34px 16px 48px; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">DEMO 腳本 · 給組員討論</div>
+    <h1 class="title">AI 上網管家 · Demo 四幕</h1>
+    <p class="lede">決賽要演的流程,一頁看完。同一個「3 人東京行」,從<b>排行程</b>一路走到<b>一鍵團體購</b>,證明去趣獨有的優勢:<b>它在你排行程時,就已經有你的行程</b>——別家只能在你 Google「eSIM 推薦」時才遇到你。沿用品牌藍(方向 A);要換 B 科技夜色 / C 旅行暖感隨時可換。看完把回饋丟我,我照這個接進 React。</p>
+    <div class="flow">
+      <span class="flow-step"><b>1</b>排行程</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step"><b>2</b>上網章節長出來</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step"><b>3</b>問到你敢買</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step"><b>4</b>一鍵團體購</span>
+    </div>
+  </header>
+
+  <div class="board">
+    <!-- Beat 1 -->
+    <section class="beat">
+      <div class="beat-head"><span class="beat-num">1</span><span class="beat-name">排行程</span></div>
+      <div class="phone"><div class="screen">
+        <div class="s-topbar"><span class="s-logo"><i>▶</i>去趣 <b>eSIM</b></span><span class="s-tag">我的行程</span></div>
+        <div class="s-body">
+          <div>
+            <div class="s-trip-flag">🇯🇵 東京</div>
+            <div class="s-trip-title">東京 5 天・3 人同行</div>
+            <div class="s-trip-meta">9/26–9/30 · 與 小美、阿哲 共編</div>
+          </div>
+          <div class="s-days">
+            <div class="s-day"><b>D1</b>淺草寺 → 晴空塔 → 上野</div>
+            <div class="s-day"><b>D2</b>築地 → 銀座 → 台場</div>
+            <div class="s-day s-muted"><b>D3–5</b>鎌倉・新宿・自由行…</div>
+          </div>
+          <div class="s-chapters">
+            <span class="s-chip done">交通 ✓</span>
+            <span class="s-chip done">花費 ✓</span>
+            <span class="s-chip gen">上網 · 生成中…</span>
+          </div>
+          <div class="s-gen">
+            <div class="s-gen-row"><span class="s-spark"></span>AI 正在讀你的行程…</div>
+            <div class="s-skel"></div>
+            <div class="s-skel short"></div>
+          </div>
+        </div>
+      </div></div>
+      <p class="beat-note">去趣的攻略向來有「<b>交通</b>」「<b>花費</b>」章節,唯獨沒有「<b>上網</b>」。這一步讓它<span class="hi">自己長出來</span>——把行程裡的一塊空白,變成成交點。</p>
+    </section>
+
+    <!-- Beat 2 -->
+    <section class="beat">
+      <div class="beat-head"><span class="beat-num">2</span><span class="beat-name">上網章節長出來</span></div>
+      <div class="phone"><div class="screen">
+        <div class="s-topbar"><span class="s-logo"><i>▶</i>去趣 <b>eSIM</b></span><span class="s-tag">我的行程</span></div>
+        <div class="s-body">
+          <div class="s-chapters">
+            <span class="s-chip done">交通 ✓</span>
+            <span class="s-chip done">花費 ✓</span>
+            <span class="s-chip accent">上網 ✓</span>
+          </div>
+          <div class="s-section-h"><span class="s-num">＋</span>你的上網章節</div>
+          <div class="s-card">
+            <div class="s-card-top">
+              <div>
+                <div class="s-meta">🇯🇵 日本・5 天・每人</div>
+                <div class="s-name">日本 高速吃到飽</div>
+                <span class="s-hl">✦ 不限流量,追劇導航都不怕</span>
+              </div>
+              <div class="s-price"><b>NT$399</b><small>/人</small></div>
+            </div>
+            <div class="s-stats">
+              <span class="s-pill data">預估 ≈ 9GB/人</span>
+              <span class="s-pill pts">回饋 20 Points</span>
+            </div>
+            <p class="s-reason">你們這趟 5 天狂拍限動 + 全程導航,預估每人約 9GB。吃到飽最省心,不用中途擔心加購。</p>
+            <div class="s-flow-h">流量來源預估</div>
+            <div class="s-bar-row"><span class="s-bl">IG 限動</span><span class="s-bar"><i style="width:88%"></i></span></div>
+            <div class="s-bar-row"><span class="s-bl">導航</span><span class="s-bar"><i style="width:58%"></i></span></div>
+            <div class="s-bar-row"><span class="s-bl">查資料</span><span class="s-bar"><i style="width:30%"></i></span></div>
+          </div>
+        </div>
+      </div></div>
+      <p class="beat-note">AI 讀你<b>實際的行程</b>(3 人 × 5 天 × 愛拍照導航),當場算好用量、選好方案。<span class="hi">你不用再去 PTT 爬文比價</span>——去趣本來就懂你這趟。</p>
+    </section>
+
+    <!-- Beat 3 -->
+    <section class="beat">
+      <div class="beat-head"><span class="beat-num">3</span><span class="beat-name">問到你敢買</span></div>
+      <div class="phone"><div class="screen">
+        <div class="s-topbar"><span class="s-logo"><i>▶</i>去趣 <b>eSIM</b></span><span class="s-tag">AI 上網管家</span></div>
+        <div class="s-body s-chat">
+          <div class="s-msg ai">這趟推薦「日本 高速吃到飽」。還有什麼想在買之前確認的?</div>
+          <div class="s-msg me">我 iPhone 13 mini 能用嗎?落地要自己設定嗎?</div>
+          <div class="s-msg ai"><b>可以 ✓</b> iPhone 13 mini 支援 eSIM。落地只要 3 步:開漫遊 → 選去趣 eSIM → 完成,不用換卡。<span class="s-note">開不了?24H 真人即時協助,連不上直接包退。</span></div>
+          <div class="s-inputbar"><span>再問一句…</span><span class="s-send">↑</span></div>
+        </div>
+      </div></div>
+      <p class="beat-note">下單前最後的猶豫——<b>手機相容?怎麼開通?開不了怎麼辦?</b>——一次講清,並附上「<span class="hi">24H 真人 + 包退</span>」。把焦慮變成下單。</p>
+    </section>
+
+    <!-- Beat 4 -->
+    <section class="beat">
+      <div class="beat-head"><span class="beat-num">4</span><span class="beat-name">一鍵團體購</span><span class="beat-new">NEW</span></div>
+      <div class="phone"><div class="screen">
+        <div class="s-topbar"><span class="s-logo"><i>▶</i>去趣 <b>eSIM</b></span><span class="s-tag">團體購</span></div>
+        <div class="s-body">
+          <div class="s-group-h">這趟 <b>3 人同行</b> → 一鍵幫全團配好 eSIM</div>
+          <div class="s-cart">
+            <div class="s-cart-row"><span class="s-who">你</span><span class="s-what">日本 高速吃到飽</span><span class="s-amt">399</span></div>
+            <div class="s-cart-row"><span class="s-who">小美</span><span class="s-what">日本 高速吃到飽</span><span class="s-amt">399</span></div>
+            <div class="s-cart-row"><span class="s-who">阿哲</span><span class="s-what">日本 高速吃到飽</span><span class="s-amt">399</span></div>
+          </div>
+          <div class="s-sum">
+            <div class="s-sum-row"><span>小計</span><span>NT$1,197</span></div>
+            <div class="s-sum-row disc"><span>團體 9 折</span><span>−NT$120</span></div>
+            <div class="s-sum-row pts"><span>和泰 Points 回饋</span><span>+60</span></div>
+            <div class="s-sum-row total"><span>總計</span><span><b>NT$1,077</b></span></div>
+          </div>
+          <div class="s-cta">一鍵幫 3 人下單</div>
+        </div>
+      </div></div>
+      <p class="beat-note">去趣獨有的<b>共編行程</b>知道你們幾個人 → 一趟從賣 1 張變 <span class="hi">3 張</span>。競品在比價頁遇到你、對你的行程一無所知,<b>做不到這件事</b>。</p>
+    </section>
+  </div>
+
+  <footer>
+    <div class="cols">
+      <div>
+        <span class="lbl">怎麼接進程式</span>
+        骨架大多能重用:Vite + <b>/api 代理拿金鑰</b> + <b>沒金鑰自動回 mock</b> + Claude structured output + 客服對話都在。新的東西只有兩塊:①行程頁與「上網章節」的<b>長出</b>、②<b>團體購結帳</b>。
+      </div>
+      <div>
+        <span class="lbl">範圍界線</span>
+        <b>對外 SEO</b>(每篇攻略自動生成上網段落、吃 Google 搜尋流量)這次<b>只寫進企劃一句話</b>,demo 不演。畫面數字皆為 mock,可換真實方案/價格。
+      </div>
+    </div>
+  </footer>
+</div>

@@ -1,10 +1,14 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { PERSONAS, type Persona } from "./data/personas";
 import { postRecommend, type Recommendation } from "./lib/api";
-import { PersonaPicker } from "./components/PersonaPicker";
-import { RecommendationCard } from "./components/RecommendationCard";
-import { ChatPanel } from "./components/ChatPanel";
-import { StepLoader } from "./components/StepLoader";
+import { PhoneShell, type Tab } from "./components/PhoneShell";
+import { TripScreen } from "./screens/TripScreen";
+import { PlanScreen } from "./screens/PlanScreen";
+import { CheckoutScreen } from "./screens/CheckoutScreen";
+import { SuccessScreen } from "./screens/SuccessScreen";
+import { ChatScreen } from "./screens/ChatScreen";
+import { MeScreen } from "./screens/MeScreen";
+import { PlaceholderScreen } from "./screens/PlaceholderScreen";
 
 // Keep the "AI thinking" animation visible even when the API answers instantly
 // (mock / cached responses), so the reveal feels earned. Tunable for demos.
@@ -12,27 +16,39 @@ const MIN_THINKING_MS = 1400;
 
 const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
+// Screens pushed within the 行程 tab's navigation stack.
+type TripView = "trip" | "plan" | "checkout" | "success" | "chat";
+
 export function App() {
-  const [selected, setSelected] = useState<Persona | null>(null);
+  const [tab, setTab] = useState<Tab>("trip");
+  const [stack, setStack] = useState<TripView[]>(["trip"]);
+  const [personaId, setPersonaId] = useState(PERSONAS[0].id);
+
   const [recommendation, setRecommendation] = useState<Recommendation | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const recRef = useRef<HTMLDivElement>(null);
+  const [pickedPlanId, setPickedPlanId] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (recommendation) {
-      recRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  }, [recommendation]);
+  const persona = PERSONAS.find((p) => p.id === personaId) ?? PERSONAS[0];
+  const activePlanId = pickedPlanId ?? recommendation?.recommendedPlanId ?? "";
+  const activePlan =
+    recommendation?.plans.find((p) => p.id === activePlanId) ?? recommendation?.plan ?? null;
 
-  async function handleSelect(persona: Persona) {
-    setSelected(persona);
-    setRecommendation(null);
-    setError(null);
+  const view = stack[stack.length - 1];
+
+  function push(v: TripView) {
+    setStack((s) => [...s, v]);
+  }
+  function back() {
+    setStack((s) => (s.length > 1 ? s.slice(0, -1) : s));
+  }
+
+  async function fetchRecommendation(target: Persona) {
     setLoading(true);
+    setError(null);
     try {
       const [rec] = await Promise.all([
-        postRecommend(persona.itinerary),
+        postRecommend(target.itinerary),
         delay(MIN_THINKING_MS),
       ]);
       setRecommendation(rec);
@@ -43,68 +59,93 @@ export function App() {
     }
   }
 
-  return (
-    <div className="app">
-      <header className="appbar">
-        <div className="brand-lockup">
-          <span className="brand-mark">▶</span>
-          <span className="brand-word">
-            去趣 <b>eSIM</b>
-          </span>
-        </div>
-        <span className="appbar-tag">AI 上網管家</span>
-      </header>
+  function openNetwork() {
+    push("plan");
+    if (!recommendation && !loading) void fetchRecommendation(persona);
+  }
 
-      <div className="hero">
-        <div className="hero-kicker">GENAI · 行前上網顧問</div>
-        <h1>你的行程，就是你的方案</h1>
-        <p>選一位旅客，看 AI 如何推薦最適 eSIM</p>
-      </div>
+  function pickPersona(p: Persona) {
+    setPersonaId(p.id);
+    setRecommendation(null);
+    setPickedPlanId(null);
+    setError(null);
+    setStack(["trip"]);
+    setTab("trip");
+  }
 
-      <main className="content">
-        <section className="section">
-          <div className="section-label">
-            <span className="section-num">1</span>選一位旅客
-          </div>
-          <PersonaPicker
-            personas={PERSONAS}
-            selectedId={selected?.id ?? null}
-            onSelect={handleSelect}
+  function renderTripStack() {
+    switch (view) {
+      case "plan":
+        return (
+          <PlanScreen
+            itinerary={persona.itinerary}
+            recommendation={recommendation}
+            activePlan={activePlan}
+            loading={loading}
+            error={error}
+            selectedPlanId={activePlanId}
+            onSelect={setPickedPlanId}
+            onBack={back}
+            onCheckout={() => push("checkout")}
+            onOpenChat={() => push("chat")}
           />
-        </section>
+        );
+      case "checkout":
+        return activePlan ? (
+          <CheckoutScreen
+            plan={activePlan}
+            itinerary={persona.itinerary}
+            onBack={back}
+            onConfirm={() => push("success")}
+          />
+        ) : (
+          <div className="error">找不到方案，無法結帳</div>
+        );
+      case "success":
+        return (
+          <SuccessScreen
+            travelers={persona.itinerary.travelers}
+            companions={persona.itinerary.companions}
+            planName={activePlan?.name ?? "去趣 eSIM"}
+            onDone={() => setStack(["trip"])}
+          />
+        );
+      case "chat":
+        return <ChatScreen onBack={back} />;
+      case "trip":
+      default:
+        return (
+          <TripScreen
+            itinerary={persona.itinerary}
+            networkPlanName={recommendation ? (activePlan?.name ?? null) : null}
+            onOpenNetwork={openNetwork}
+          />
+        );
+    }
+  }
 
-        {loading && (
-          <section className="section">
-            <StepLoader />
-          </section>
-        )}
+  function renderTab() {
+    switch (tab) {
+      case "home":
+        return <PlaceholderScreen title="首頁" note="探索靈感、熱門行程與優惠都在這（Demo 略）" />;
+      case "explore":
+        return <PlaceholderScreen title="探索" note="景點、攻略與美食清單（Demo 略）" />;
+      case "me":
+        return <MeScreen currentId={personaId} onPick={pickPersona} />;
+      case "trip":
+      default:
+        return renderTripStack();
+    }
+  }
 
-        {error && (
-          <section className="section">
-            <div className="error">出錯了：{error}</div>
-          </section>
-        )}
+  // Key the screen so each push/tab-switch replays the slide-in transition.
+  const viewKey = tab === "trip" ? `trip:${view}` : tab;
 
-        {recommendation && selected && !loading && (
-          <>
-            <section className="section" ref={recRef}>
-              <div className="section-label">
-                <span className="section-num">2</span>專屬方案推薦
-              </div>
-              <RecommendationCard recommendation={recommendation} persona={selected} />
-            </section>
-
-            <section className="section">
-              <div className="section-label">
-                <span className="section-num">3</span>還有疑問？問 AI 客服
-              </div>
-              <ChatPanel />
-            </section>
-          </>
-        )}
-      </main>
-
-      <footer className="footer">Demo · 資料為模擬，未串接金鑰時顯示示範結果</footer>
-    </div>
+  return (
+    <PhoneShell tab={tab} onTab={setTab}>
+      <div className="screen-view" key={viewKey}>
+        {renderTab()}
+      </div>
+    </PhoneShell>
   );
 }

@@ -1,5 +1,10 @@
 // Frontend-facing types + fetch helpers. Types mirror api/_lib on the server.
 
+export interface DayPlan {
+  day: string; // e.g. "D1" / "D3–5"
+  spots: string; // e.g. "淺草寺 → 晴空塔 → 上野"
+}
+
 export interface Itinerary {
   destination: string;
   countryCode: string;
@@ -7,6 +12,11 @@ export interface Itinerary {
   travelers: number;
   habits: string[];
   notes?: string;
+  // Presentation-only fields for the itinerary view. The recommend API ignores
+  // any it doesn't use, so they ride along harmlessly.
+  dateRange?: string; // e.g. "9/26–9/30"
+  companions?: string[]; // 同行者名字，不含「你」本人
+  dayPlan?: DayPlan[];
 }
 
 export interface Plan {
@@ -29,6 +39,8 @@ export interface Recommendation {
   breakdown: { activity: string; gb: number }[];
   upsellHint?: string;
   plan: Plan | null;
+  // 該國所有適用方案，依推薦度排序（最推薦在最前）。
+  plans: Plan[];
 }
 
 export interface ChatMessage {
