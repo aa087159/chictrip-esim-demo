@@ -9,6 +9,8 @@ import { SuccessScreen } from "./screens/SuccessScreen";
 import { ChatScreen } from "./screens/ChatScreen";
 import { MeScreen } from "./screens/MeScreen";
 import { PlaceholderScreen } from "./screens/PlaceholderScreen";
+import { CompanionScreen } from "./screens/CompanionScreen";
+import { getCompanionScenario } from "./data/companion-scenarios";
 
 // Keep the "AI thinking" animation visible even when the API answers instantly
 // (mock / cached responses), so the reveal feels earned. Tunable for demos.
@@ -17,7 +19,7 @@ const MIN_THINKING_MS = 1400;
 const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 // Screens pushed within the 行程 tab's navigation stack.
-type TripView = "trip" | "plan" | "checkout" | "success" | "chat";
+type TripView = "trip" | "plan" | "checkout" | "success" | "chat" | "companion";
 
 export function App() {
   const [tab, setTab] = useState<Tab>("trip");
@@ -112,6 +114,15 @@ export function App() {
         );
       case "chat":
         return <ChatScreen onBack={back} />;
+      case "companion":
+        return (
+          <CompanionScreen
+            scenario={getCompanionScenario(persona.id)}
+            companions={persona.itinerary.companions}
+            onBack={back}
+            onDone={() => setStack(["trip"])}
+          />
+        );
       case "trip":
       default:
         return (
@@ -119,6 +130,7 @@ export function App() {
             itinerary={persona.itinerary}
             networkPlanName={recommendation ? (activePlan?.name ?? null) : null}
             onOpenNetwork={openNetwork}
+            onOpenCompanion={() => push("companion")}
           />
         );
     }

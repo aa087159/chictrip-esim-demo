@@ -6,9 +6,15 @@ interface Props {
   // 已配好的方案名稱；null 表示還沒產生「上網」章節。
   networkPlanName: string | null;
   onOpenNetwork: () => void;
+  onOpenCompanion: () => void;
 }
 
-export function TripScreen({ itinerary, networkPlanName, onOpenNetwork }: Props) {
+export function TripScreen({
+  itinerary,
+  networkPlanName,
+  onOpenNetwork,
+  onOpenCompanion,
+}: Props) {
   const { destination, countryCode, days, travelers, dateRange, companions, dayPlan } =
     itinerary;
   const isGroup = travelers > 1;
@@ -78,6 +84,20 @@ export function TripScreen({ itinerary, networkPlanName, onOpenNetwork }: Props)
           </button>
         </div>
       </div>
+
+      {networkPlanName && (
+        <div className="trip-section">
+          <div className="trip-section-h">旅途中</div>
+          <button className="alert-card" onClick={onOpenCompanion}>
+            <span className="alert-ic">⛈️</span>
+            <span className="alert-body">
+              <span className="alert-title">大雨提醒</span>
+              <span className="alert-sub">你的行程可能受影響，AI 幫你想 Plan B</span>
+            </span>
+            <span className="alert-go">→</span>
+          </button>
+        </div>
+      )}
     </div>
   );
 }
