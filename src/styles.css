@@ -30,44 +30,33 @@ body {
   margin: 0;
 }
 body {
-  background: radial-gradient(1200px 700px at 50% -10%, #e7eef7, #dfe5ee);
+  background: var(--bg);
   color: var(--ink);
   font-family: var(--font);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  min-height: 100vh;
 }
 
-/* ---- Phone device frame ---- */
+/* ---- App shell (mobile-first: fills the screen; frame is added on desktop) ---- */
 .device {
-  width: 390px;
-  padding: 12px;
-  margin: 22px 0;
-  background: linear-gradient(160deg, #232a3a, #0a0d14);
-  border-radius: 54px;
-  box-shadow:
-    0 40px 90px rgba(18, 24, 38, 0.5),
-    inset 0 0 0 2px rgba(255, 255, 255, 0.06);
+  width: 100%;
 }
 .screen {
   position: relative;
-  height: 812px;
-  max-height: calc(100vh - 68px);
+  height: 100vh; /* fallback */
+  height: 100dvh; /* excludes mobile browser chrome so the tab bar isn't cut off */
   background: var(--bg);
-  border-radius: 43px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
 }
 
-/* Status bar */
+/* Fake iOS status bar — only shown inside the desktop phone mockup;
+   on a real phone the OS already has one, so it's hidden by default. */
 .statusbar {
   flex: none;
   height: 46px;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: space-between;
   padding: 0 26px;
@@ -155,7 +144,7 @@ body {
   display: flex;
   border-top: 1px solid var(--line);
   background: var(--card);
-  padding-bottom: 4px;
+  padding-bottom: calc(4px + env(safe-area-inset-bottom));
 }
 .tab {
   flex: 1;
@@ -1203,21 +1192,31 @@ body {
   }
 }
 
-/* Full-screen on real phones */
-@media (max-width: 460px) {
+/* Desktop / tablet: present the app inside a phone mockup, centered. */
+@media (min-width: 480px) {
   body {
-    background: var(--bg);
+    background: radial-gradient(1200px 700px at 50% -10%, #e7eef7, #dfe5ee);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 22px 0;
   }
   .device {
-    width: 100%;
-    padding: 0;
-    margin: 0;
-    border-radius: 0;
-    box-shadow: none;
+    width: 390px;
+    padding: 12px;
+    background: linear-gradient(160deg, #232a3a, #0a0d14);
+    border-radius: 54px;
+    box-shadow:
+      0 40px 90px rgba(18, 24, 38, 0.5),
+      inset 0 0 0 2px rgba(255, 255, 255, 0.06);
   }
   .screen {
-    height: 100vh;
-    max-height: none;
-    border-radius: 0;
+    height: 812px;
+    max-height: calc(100vh - 44px);
+    border-radius: 43px;
+  }
+  .statusbar {
+    display: flex;
   }
 }
