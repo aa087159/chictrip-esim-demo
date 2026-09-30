@@ -1,0 +1,261 @@
+<title>旅中 vs 行前對照</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Space+Mono:wght@400;700&display=swap">
+<style>
+  :root {
+    --bg: #f4f6fa;
+    --panel: #ffffff;
+    --panel-2: #eef1f6;
+    --ink: #1a2233;
+    --ink-2: #5b6577;
+    --ink-3: #8b94a6;
+    --line: #e2e7ef;
+    --mid: #e8734a;        /* 旅中 accent (coral) */
+    --mid-soft: #fdeee7;
+    --mid-ink: #b8501f;
+    --pre: #089cf7;        /* 行前 accent (去趣 blue) */
+    --pre-soft: #e7f4fe;
+    --pre-ink: #0768ab;
+    --good: #17a673; --good-soft: #e3f6ee;
+    --warn: #c98a1a; --warn-soft: #f9efd9;
+    --weak: #c15b5b; --weak-soft: #f8e6e6;
+    --mono: "Space Mono", ui-monospace, monospace;
+    --sans: "Noto Sans TC", system-ui, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f131b; --panel: #171c26; --panel-2: #1d2330;
+      --ink: #eef1f7; --ink-2: #a4adbd; --ink-3: #727d90; --line: #29313f;
+      --mid: #f0855e; --mid-soft: rgba(240,133,94,.15); --mid-ink: #f4a582;
+      --pre: #3aa9f7; --pre-soft: rgba(58,169,247,.15); --pre-ink: #8fd0ff;
+      --good: #35c48d; --good-soft: rgba(53,196,141,.16);
+      --warn: #d9a441; --warn-soft: rgba(217,164,65,.16);
+      --weak: #d47b7b; --weak-soft: rgba(212,123,123,.16);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0f131b; --panel: #171c26; --panel-2: #1d2330;
+    --ink: #eef1f7; --ink-2: #a4adbd; --ink-3: #727d90; --line: #29313f;
+    --mid: #f0855e; --mid-soft: rgba(240,133,94,.15); --mid-ink: #f4a582;
+    --pre: #3aa9f7; --pre-soft: rgba(58,169,247,.15); --pre-ink: #8fd0ff;
+    --good: #35c48d; --good-soft: rgba(53,196,141,.16);
+    --warn: #d9a441; --warn-soft: rgba(217,164,65,.16);
+    --weak: #d47b7b; --weak-soft: rgba(212,123,123,.16);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 44px 22px 72px; }
+
+  .eyebrow { font: 700 12px/1 var(--mono); letter-spacing: 1.5px; color: var(--ink-3); text-transform: uppercase; }
+  h1 { font-weight: 900; font-size: clamp(26px, 4.5vw, 40px); letter-spacing: -0.02em; line-height: 1.12; margin: 12px 0 14px; text-wrap: balance; }
+  h1 .mid { color: var(--mid-ink); }
+  h1 .pre { color: var(--pre-ink); }
+  .lede { font-size: 15.5px; color: var(--ink-2); max-width: 72ch; margin: 0; }
+  .lede b { color: var(--ink); font-weight: 700; }
+
+  /* Direction cards */
+  .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 34px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 20px; position: relative; overflow: hidden; }
+  .card::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 4px; }
+  .card.mid::before { background: var(--mid); }
+  .card.pre::before { background: var(--pre); }
+  .card-tag { display: inline-block; font: 700 11px/1 var(--mono); letter-spacing: 1px; padding: 5px 9px; border-radius: 6px; }
+  .card.mid .card-tag { color: var(--mid-ink); background: var(--mid-soft); }
+  .card.pre .card-tag { color: var(--pre-ink); background: var(--pre-soft); }
+  .card h2 { font-size: 19px; font-weight: 900; margin: 12px 0 2px; letter-spacing: -0.01em; }
+  .card .src { font-size: 12px; color: var(--ink-3); }
+  .card dl { margin: 15px 0 0; display: flex; flex-direction: column; gap: 11px; }
+  .card dt { font: 700 10.5px/1 var(--mono); letter-spacing: 0.5px; color: var(--ink-3); text-transform: uppercase; margin-bottom: 3px; }
+  .card dd { margin: 0; font-size: 13.5px; color: var(--ink); }
+  .card dd b { font-weight: 700; }
+  .ready { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 700; color: var(--good); background: var(--good-soft); padding: 5px 10px; border-radius: 999px; margin-top: 3px; }
+  .ready a { color: var(--pre-ink); }
+
+  /* Comparison table */
+  .section-h { font-weight: 900; font-size: 20px; margin: 40px 0 4px; letter-spacing: -0.01em; }
+  .section-sub { font-size: 13.5px; color: var(--ink-2); margin: 0 0 16px; }
+  .table-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 16px; background: var(--panel); }
+  table { border-collapse: collapse; width: 100%; min-width: 660px; }
+  thead th { text-align: left; font-size: 13px; padding: 14px 16px; border-bottom: 2px solid var(--line); vertical-align: bottom; }
+  thead th.crit { width: 30%; color: var(--ink-3); font: 700 11px/1.3 var(--mono); letter-spacing: 0.5px; text-transform: uppercase; }
+  thead th.mid { color: var(--mid-ink); } thead th.pre { color: var(--pre-ink); }
+  thead th .w { display: block; font: 400 11px/1 var(--mono); color: var(--ink-3); margin-top: 4px; letter-spacing: 0; text-transform: none; }
+  tbody td { padding: 13px 16px; border-bottom: 1px solid var(--line); vertical-align: top; font-size: 13px; }
+  tbody tr:last-child td { border-bottom: none; }
+  td.crit { font-weight: 700; color: var(--ink); }
+  td.crit small { display: block; font: 400 11px/1.3 var(--mono); color: var(--ink-3); margin-top: 3px; }
+  .verdict { display: flex; gap: 9px; align-items: flex-start; }
+  .chip { flex: none; font: 800 11px/1 var(--sans); padding: 4px 8px; border-radius: 6px; margin-top: 1px; white-space: nowrap; }
+  .chip.s { color: var(--good); background: var(--good-soft); }
+  .chip.m { color: var(--warn); background: var(--warn-soft); }
+  .chip.w { color: var(--weak); background: var(--weak-soft); }
+  .chip.t { color: var(--ink-3); background: var(--panel-2); }
+  .verdict span.txt { color: var(--ink-2); }
+
+  /* Callout boxes */
+  .box { border-radius: 16px; padding: 18px 20px; margin-top: 22px; font-size: 14px; line-height: 1.7; }
+  .box.insight { background: var(--panel-2); border: 1px solid var(--line); }
+  .box.rec { background: var(--pre-soft); border: 1px solid color-mix(in srgb, var(--pre) 30%, transparent); }
+  .box h3 { margin: 0 0 9px; font-size: 15px; font-weight: 900; }
+  .box.rec h3 { color: var(--pre-ink); }
+  .box b { font-weight: 700; }
+  .box ul { margin: 10px 0 0; padding-left: 0; list-style: none; display: flex; flex-direction: column; gap: 9px; }
+  .box li { padding-left: 22px; position: relative; }
+  .box li::before { content: "→"; position: absolute; left: 0; color: var(--pre-ink); font-weight: 700; }
+  .oneline { margin-top: 14px; padding: 12px 16px; border-left: 3px solid var(--pre); background: var(--panel); border-radius: 0 10px 10px 0; font-weight: 700; font-size: 14.5px; }
+
+  /* Combine-into-one-line section */
+  .arc { display: flex; align-items: stretch; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+  .arc-step { flex: 1; min-width: 220px; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; font-size: 13.5px; }
+  .arc-step .arc-k { display: inline-block; font: 800 10.5px/1 var(--mono); letter-spacing: 0.5px; padding: 4px 9px; border-radius: 6px; margin-bottom: 9px; }
+  .arc-step.pre-step { border-color: color-mix(in srgb, var(--pre) 40%, var(--line)); }
+  .arc-step.pre-step .arc-k { color: var(--pre-ink); background: var(--pre-soft); }
+  .arc-step.mid-step .arc-k { color: var(--mid-ink); background: var(--mid-soft); }
+  .arc-step b { font-weight: 800; }
+  .arc-step em { display: block; margin-top: 7px; font-style: normal; font: 700 11px/1.3 var(--mono); color: var(--ink-3); }
+  .arc-step.pre-step em { color: var(--pre-ink); }
+  .arc-join { align-self: center; color: var(--ink-3); font-weight: 800; font-size: 18px; }
+  .land { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 18px; }
+  .land-col { background: var(--panel-2); border-radius: 12px; padding: 14px 16px; font-size: 13px; color: var(--ink-2); }
+  .land-col b { color: var(--ink); font-weight: 700; }
+  .land-h { font: 800 11px/1 var(--mono); letter-spacing: 1px; color: var(--ink); margin-bottom: 7px; }
+
+  footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--ink-3); line-height: 1.7; }
+  footer a { color: var(--pre-ink); }
+
+  @media (max-width: 620px) {
+    .cards { grid-template-columns: 1fr; }
+    .wrap { padding: 32px 16px 56px; }
+  }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">2026 和泰 AI 黑客松 · 組內方向對齊</div>
+    <h1><span class="mid">旅中 Companion</span> vs <span class="pre">行前買對 eSIM</span></h1>
+    <p class="lede">題目只有一句話:<b>怎麼幫去趣賣更多 eSIM</b>。現在檯面上有兩條路——組員文件的「旅中 AI Companion」,和目前已有可跑原型的「行前買對 eSIM」。這頁把兩條各自<b>最強</b>的版本,放在評審四個標準上逐項比,幫大家在初賽前對齊。這不是二選一互斥,是決定<b>誰當主軸</b>。</p>
+  </header>
+
+  <div class="cards">
+    <section class="card mid">
+      <span class="card-tag">方向 A · 旅中</span>
+      <h2>旅中 AI Companion</h2>
+      <div class="src">來源:組員 PDF「AI 旅中備案」+ Google Doc 提案</div>
+      <dl>
+        <div><dt>一句話</dt><dd>旅途中遇到突發(大雨 / 客滿 / 延誤),AI 即時給 2–3 個 Plan B、一鍵替換行程。</dd></div>
+        <div><dt>最強版本</dt><dd><b>「買去趣 eSIM 就送 AI 旅中管家」</b>——把 AI 服務額度綁進 eSIM 方案包,當作選去趣、而非更便宜競品的差異化理由。</dd></div>
+        <div><dt>跟 eSIM 的關係</dt><dd>綁定 / 加購(bolt-on)。</dd></div>
+        <div><dt>現況</dt><dd>有完整規劃,原型待做。</dd></div>
+      </dl>
+    </section>
+
+    <section class="card pre">
+      <span class="card-tag">方向 B · 行前</span>
+      <h2>行前買對 eSIM</h2>
+      <div class="src">來源:本週收斂 + 已部署原型</div>
+      <dl>
+        <div><dt>一句話</dt><dd>你在去趣<b>排行程的當下</b>,AI 用你的行程直接幫你選對 eSIM、一鍵(團體)下單,趕在你去 PTT 比價之前。</dd></div>
+        <div><dt>最強版本</dt><dd>去趣獨有「你的行程」→ 在比價戰場<b>外</b>用心佔+個人化把購買成交在 App 內;共編行程 → 團體購一趟多賣幾張。</dd></div>
+        <div><dt>跟 eSIM 的關係</dt><dd>eSIM 就是<b>被賣的商品</b>(內生)。</dd></div>
+        <div><dt>現況</dt><dd><span class="ready">✓ 已有可跑原型 <a href="https://chictrip-esim-demo.vercel.app">開啟</a></span></dd></div>
+      </dl>
+    </section>
+  </div>
+
+  <h2 class="section-h">逐項對照</h2>
+  <p class="section-sub">依評審初賽權重排列。<b>強 / 中 / 弱</b>是對「這題(賣更多 eSIM)」的相對表現,不是這個點子的絕對好壞。</p>
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th class="crit">評比項目</th>
+          <th class="mid">A · 旅中 Companion</th>
+          <th class="pre">B · 行前買對</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="crit">切題:賣更多 eSIM<small>主題連結 30%</small></td>
+          <td><div class="verdict"><span class="chip m">中</span><span class="txt">靠「額度綁方案包」<b>間接</b>帶購買,不直接打購買決策。</span></div></td>
+          <td><div class="verdict"><span class="chip s">強</span><span class="txt"><b>直接</b>介入 eSIM 購買的那一刻,把規劃者轉成買家。</span></div></td>
+        </tr>
+        <tr>
+          <td class="crit">跟「賣 eSIM」的關係<small>Vivian 最在意的一刀</small></td>
+          <td><div class="verdict"><span class="chip w">弱</span><span class="txt">eSIM 是背景;「要有網才能用 AI」對任何網路都成立,綁額度是包裝。</span></div></td>
+          <td><div class="verdict"><span class="chip s">強</span><span class="txt">eSIM 是被賣的商品,AI 的工作就是把它賣掉——連結內生。</span></div></td>
+        </tr>
+        <tr>
+          <td class="crit">可行性<small>25%</small></td>
+          <td><div class="verdict"><span class="chip m">中</span><span class="txt">要接即時 API,且活在去趣最弱的「旅程中」;主動偵測有冷啟動。</span></div></td>
+          <td><div class="verdict"><span class="chip s">強</span><span class="txt">只用去趣<b>已有的行程資料</b>,不靠拿不到的即時訊號 / 定位。</span></div></td>
+        </tr>
+        <tr>
+          <td class="crit">創意<small>25%</small></td>
+          <td><div class="verdict"><span class="chip s">強</span><span class="txt">「大雨改道」情境鮮明、好演,故事性佳。</span></div></td>
+          <td><div class="verdict"><span class="chip s">強</span><span class="txt">把「比不贏的比價」換成「誰罩你」;但需執行成心佔、別淪為擺設。</span></div></td>
+        </tr>
+        <tr>
+          <td class="crit">AI 整合<small>20%</small></td>
+          <td><div class="verdict"><span class="chip s">強</span><span class="txt">AI 幾乎是整個產品。<b>風險</b>:易被評審看成「通用 ChatGPT」。</span></div></td>
+          <td><div class="verdict"><span class="chip s">強</span><span class="txt">AI 只在該出現的兩刻(推薦 / 消除焦慮),比例恰當、剛好壓 20%。</span></div></td>
+        </tr>
+        <tr>
+          <td class="crit">是不是「去趣 but better」?<small>競品抄得走嗎</small></td>
+          <td><div class="verdict"><span class="chip w">弱</span><span class="txt">ChatGPT 就會;DJB / Airalo 也能加個助理。行程優勢沒被當護城河用。</span></div></td>
+          <td><div class="verdict"><span class="chip s">強</span><span class="txt">競品在比價頁才遇到你、對你一無所知;去趣在規劃時就有你的行程。</span></div></td>
+        </tr>
+        <tr>
+          <td class="crit">去趣的結構位置<small>強項 vs 弱項</small></td>
+          <td><div class="verdict"><span class="chip w">弱</span><span class="txt">旅程中——拿不到即時數據、訊號贏不了 DJB、海外沒生態。</span></div></td>
+          <td><div class="verdict"><span class="chip s">強</span><span class="txt">出國前在 App——230 萬會員、行程資料、和泰生態都在台灣。</span></div></td>
+        </tr>
+        <tr>
+          <td class="crit">Demo / 完成度<small>決賽 20%</small></td>
+          <td><div class="verdict"><span class="chip t">待做</span><span class="txt">東京大雨原型還沒有。</span></div></td>
+          <td><div class="verdict"><span class="chip s">強</span><span class="txt">已有部署可跑原型(行程 → 方案 → 團體購 → 開通)。</span></div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="box insight">
+    <h3>一個貫穿全部的事實</h3>
+    <b>去趣強在「出國前」,弱在「旅程中」;而「賣 eSIM」需要的是「購買」的觸發,不是用得爽的服務。</b> 旅中 Companion 服務的對象,是<b>已經有網路的人</b>——他們早就買了 eSIM。所以它天生難以直接回答「賣更多」這題。
+  </div>
+
+  <div class="box rec">
+    <h3>建議:誰當主軸</h3>
+    <ul>
+      <li><b>主軸 = 行前買對 eSIM。</b> 它才直接回答題目、可行性最高,而且我們已有可跑原型(初賽書面 + 決賽 prototype 都佔優)。</li>
+      <li><b>旅中 Companion 降級為「加分層」。</b> 用它最強的「買去趣 eSIM 就送 AI 旅中管家」當<b>購買差異化</b>,掛在主軸上,而不是當獨立主線。</li>
+      <li><b>直接沿用組員成果。</b> 那兩份文件的 <b>GPT / Gemini 成本分析</b>(Flash-Lite 最省、只在需要時觸發)可原封搬進企劃的「成本 / 效益」節;「東京大雨」情境留給旅中加分場景當 demo 素材。</li>
+    </ul>
+    <div class="oneline">行前把 eSIM 賣出去,旅中讓買了的人更黏——賣的重量壓在行前。</div>
+  </div>
+
+  <h2 class="section-h">兩個都做?可以——但要有主從</h2>
+  <p class="section-sub">「不衝突」≠「該平均用力」。平均用力會稀釋切題、兩個都做不精,還把一半篇幅花在<b>不直接賣 eSIM</b> 的旅中。解法:串成一條線,主從分明——旅中不但沒被丟掉,反而強化了故事。</p>
+  <div class="arc">
+    <div class="arc-step pre-step"><span class="arc-k">行前 · 主軸</span>去趣在你排行程時就懂你 → 幫你<b>買對 eSIM</b><em>賣點,直接回答題目</em></div>
+    <div class="arc-join">→</div>
+    <div class="arc-step mid-step"><span class="arc-k">旅中 · 加分</span>同一個 AI 一路<b>罩到旅途中</b>,出事幫你想 Plan B<em>加分,證明這個 AI 有續航力</em></div>
+  </div>
+  <div class="land">
+    <div class="land-col"><div class="land-h">DEMO</div>主線就是現有原型(行程 → 方案 → 團體購 → 開通),<b>結尾加 30 秒旅中彩蛋</b>(大雨 → AI Plan B),不另開一條。</div>
+    <div class="land-col"><div class="land-h">企劃</div>旅中放「延伸 / roadmap」節,不搶主標;GPT / Gemini <b>成本分析沿用組員的</b>。</div>
+  </div>
+
+  <footer>
+    2026-09-30 · 依組員兩份提案(「AI 旅中備案」PDF、「chicTrip AI Travel Companion」Google Doc)與行前方向原型整理。<br>
+    行前原型:<a href="https://chictrip-esim-demo.vercel.app">chictrip-esim-demo.vercel.app</a>
+  </footer>
+</div>
