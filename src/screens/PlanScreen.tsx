@@ -12,6 +12,7 @@ interface Props {
   loading: boolean;
   error: string | null;
   selectedPlanId: string;
+  isSubscribed: boolean;
   onSelect: (planId: string) => void;
   onBack: () => void;
   onCheckout: () => void;
@@ -25,13 +26,14 @@ export function PlanScreen({
   loading,
   error,
   selectedPlanId,
+  isSubscribed,
   onSelect,
   onBack,
   onCheckout,
   onOpenChat,
 }: Props) {
   const isGroup = itinerary.travelers > 1;
-  const order = activePlan ? orderSummary(activePlan, itinerary.travelers) : null;
+  const order = activePlan ? orderSummary(activePlan, itinerary.travelers, isSubscribed) : null;
 
   return (
     <>

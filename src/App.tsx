@@ -30,6 +30,7 @@ export function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pickedPlanId, setPickedPlanId] = useState<string | null>(null);
+  const [isSubscribed, setIsSubscribed] = useState(false);
 
   const persona = PERSONAS.find((p) => p.id === personaId) ?? PERSONAS[0];
   const activePlanId = pickedPlanId ?? recommendation?.recommendedPlanId ?? "";
@@ -86,6 +87,7 @@ export function App() {
             loading={loading}
             error={error}
             selectedPlanId={activePlanId}
+            isSubscribed={isSubscribed}
             onSelect={setPickedPlanId}
             onBack={back}
             onCheckout={() => push("checkout")}
@@ -97,6 +99,8 @@ export function App() {
           <CheckoutScreen
             plan={activePlan}
             itinerary={persona.itinerary}
+            isSubscribed={isSubscribed}
+            onSubscribe={() => setIsSubscribed(true)}
             onBack={back}
             onConfirm={() => push("success")}
           />
@@ -143,7 +147,14 @@ export function App() {
       case "explore":
         return <PlaceholderScreen title="探索" note="景點、攻略與美食清單（Demo 略）" />;
       case "me":
-        return <MeScreen currentId={personaId} onPick={pickPersona} />;
+        return (
+          <MeScreen
+            currentId={personaId}
+            onPick={pickPersona}
+            isSubscribed={isSubscribed}
+            onToggleSubscription={() => setIsSubscribed((v) => !v)}
+          />
+        );
       case "trip":
       default:
         return renderTripStack();

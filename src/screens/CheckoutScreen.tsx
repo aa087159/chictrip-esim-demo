@@ -1,17 +1,19 @@
 import { NavBar } from "../components/NavBar";
-import { orderSummary } from "../lib/order";
+import { SUBSCRIPTION_MONTHLY_TWD, orderSummary } from "../lib/order";
 import type { Itinerary, Plan } from "../lib/api";
 
 interface Props {
   plan: Plan;
   itinerary: Itinerary;
+  isSubscribed: boolean;
+  onSubscribe: () => void;
   onBack: () => void;
   onConfirm: () => void;
 }
 
-export function CheckoutScreen({ plan, itinerary, onBack, onConfirm }: Props) {
+export function CheckoutScreen({ plan, itinerary, isSubscribed, onSubscribe, onBack, onConfirm }: Props) {
   const { travelers, companions } = itinerary;
-  const order = orderSummary(plan, travelers);
+  const order = orderSummary(plan, travelers, isSubscribed);
 
   const names = ["你", ...(companions ?? [])];
   const people = Array.from(
@@ -51,7 +53,13 @@ export function CheckoutScreen({ plan, itinerary, onBack, onConfirm }: Props) {
           {order.isGroup && (
             <div className="sum-row disc">
               <span>團體 9 折</span>
-              <span>−NT${order.discount.toLocaleString()}</span>
+              <span>−NT${order.groupDiscount.toLocaleString()}</span>
+            </div>
+          )}
+          {isSubscribed && (
+            <div className="sum-row member">
+              <span>訂閱會員 9 折</span>
+              <span>−NT${order.memberDiscount.toLocaleString()}</span>
             </div>
           )}
           <div className="sum-row pts">
@@ -65,6 +73,18 @@ export function CheckoutScreen({ plan, itinerary, onBack, onConfirm }: Props) {
             </span>
           </div>
         </div>
+
+        {!isSubscribed && (
+          <div className="sub-upsell">
+            <div>
+              訂閱去趣會員，這單再省 <b>NT${order.memberSaving.toLocaleString()}</b>
+            </div>
+            <small>NT${SUBSCRIPTION_MONTHLY_TWD} / 月，之後每趟 eSIM 都 9 折</small>
+            <button className="sub-btn" onClick={onSubscribe}>
+              加入訂閱
+            </button>
+          </div>
+        )}
 
         {!order.isGroup && (
           <div className="nudge">👥 揪朋友一起買，團體 9 折再省更多</div>

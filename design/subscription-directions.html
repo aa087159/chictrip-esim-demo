@@ -1,0 +1,267 @@
+<title>去趣訂閱會員 Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap">
+<style>
+/* Layout: page chrome themed; phone mocks always use the ChicTrip app's light palette (the app itself is light-only). */
+:root {
+  --page-bg: #f3f6fa;
+  --page-fg: #1c202b;
+  --page-fg-2: rgba(28, 32, 43, 0.68);
+  --page-line: #dfe5ee;
+  --page-card: #ffffff;
+  --page-accent: #0577c2;
+  --font: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", -apple-system, sans-serif;
+
+  /* ChicTrip app tokens (from src/styles.css) */
+  --ink: #1c202b;
+  --ink-2: rgba(28, 32, 43, 0.72);
+  --ink-3: rgba(28, 32, 43, 0.5);
+  --brand: #089cf7;
+  --brand-ink: #0577c2;
+  --brand-soft: #e7f4fe;
+  --accent: #f5a623;
+  --accent-ink: #b9740a;
+  --accent-soft: #fff4e2;
+  --app-bg: #f6f8fb;
+  --card: #ffffff;
+  --line: #e7ecf3;
+  --good: #17b26a;
+  --good-soft: #e4f7ee;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --page-bg: #11151c; --page-fg: #e8edf4; --page-fg-2: rgba(232, 237, 244, 0.7);
+    --page-line: #263040; --page-card: #18202b; --page-accent: #5bbcfa; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --page-bg: #11151c; --page-fg: #e8edf4; --page-fg-2: rgba(232, 237, 244, 0.7);
+  --page-line: #263040; --page-card: #18202b; --page-accent: #5bbcfa; color-scheme: dark;
+}
+
+body { background: var(--page-bg); color: var(--page-fg); font-family: var(--font); line-height: 1.6; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-inline: 20px; padding-block: 40px 64px; display: grid; gap: 40px; }
+
+header { display: grid; gap: 12px; max-width: 72ch; }
+.eyebrow { font-size: 12px; letter-spacing: .12em; color: var(--page-accent); font-weight: 700; }
+h1 { margin: 0; font-size: clamp(26px, 4vw, 34px); font-weight: 900; text-wrap: balance; line-height: 1.25; }
+header p { margin: 0; color: var(--page-fg-2); }
+
+.rules { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.rule { background: var(--page-card); border: 1px solid var(--page-line); border-radius: 12px; padding: 14px 16px; display: grid; gap: 4px; min-width: 0; }
+.rule b { font-size: 13px; color: var(--page-fg-2); font-weight: 500; }
+.rule span { font-size: 15px; font-weight: 700; }
+.rule small { color: var(--page-fg-2); font-size: 12.5px; }
+
+.toggle-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--page-bg); padding-block: 10px; }
+.toggle-bar > span { font-size: 14px; color: var(--page-fg-2); }
+.seg { display: inline-flex; border: 1px solid var(--page-line); border-radius: 999px; padding: 3px; background: var(--page-card); }
+.seg button { font: inherit; font-size: 14px; border: 0; background: none; color: var(--page-fg); padding: 6px 16px; border-radius: 999px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--page-accent); color: #fff; font-weight: 700; }
+.seg button:focus-visible { outline: 2px solid var(--page-accent); outline-offset: 2px; }
+
+.dir { display: grid; gap: 20px; border-top: 1px solid var(--page-line); padding-top: 28px; }
+.dir-head { display: grid; gap: 6px; max-width: 72ch; }
+.dir-head .tag { font-size: 12px; letter-spacing: .1em; font-weight: 700; color: var(--page-accent); }
+.dir-head h2 { margin: 0; font-size: 22px; font-weight: 900; }
+.dir-head p { margin: 0; color: var(--page-fg-2); }
+.tradeoff { display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 13.5px; }
+.tradeoff span::before { content: "+ "; color: var(--good); font-weight: 700; }
+.tradeoff span.con::before { content: "− "; color: #d4513b; }
+
+.phones { display: flex; flex-wrap: wrap; gap: 24px; }
+.phone-col { display: grid; gap: 8px; justify-items: start; }
+.phone-cap { font-size: 13px; color: var(--page-fg-2); }
+
+/* ---- phone mock (light app palette) ---- */
+.phone { width: 300px; max-width: 100%; background: var(--app-bg); color: var(--ink); border-radius: 28px; border: 8px solid #1c202b; overflow: hidden; font-size: 13px; line-height: 1.45; display: flex; flex-direction: column; min-height: 520px; }
+.nav { background: var(--card); padding: 12px 14px; font-weight: 700; font-size: 15px; border-bottom: 1px solid var(--line); display: flex; gap: 8px; align-items: center; }
+.nav .back { color: var(--brand); font-weight: 500; }
+.body { padding: 12px; display: grid; gap: 10px; align-content: start; flex: 1; }
+.c { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px; display: grid; gap: 8px; }
+.muted { color: var(--ink-3); font-size: 12px; }
+.row { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; font-variant-numeric: tabular-nums; }
+.row.disc { color: var(--good); }
+.row.member { color: var(--brand-ink); font-weight: 500; }
+.row.total { font-size: 15px; border-top: 1px solid var(--line); padding-top: 8px; }
+.row.total b { font-size: 18px; }
+.pts { color: var(--accent-ink); }
+.strike { text-decoration: line-through; color: var(--ink-3); font-size: 12px; margin-right: 4px; }
+
+.plan { border: 1.5px solid var(--line); border-radius: 12px; padding: 10px; display: grid; gap: 4px; background: var(--card); }
+.plan.pick { border-color: var(--brand); background: var(--brand-soft); }
+.plan .pname { font-weight: 700; }
+.plan .price { font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 1px 8px; border-radius: 999px; background: var(--brand); color: #fff; }
+.badge.gold { background: var(--accent); }
+
+.upsell { border: 1.5px dashed var(--brand); background: var(--brand-soft); border-radius: 12px; padding: 10px 12px; display: grid; gap: 6px; }
+.upsell b { color: var(--brand-ink); }
+.mini-btn { justify-self: start; font: inherit; font-size: 12px; font-weight: 700; border: 0; background: var(--brand); color: #fff; padding: 5px 12px; border-radius: 999px; }
+
+.member-card { border-radius: 16px; padding: 14px; display: grid; gap: 6px; color: #fff; background: linear-gradient(135deg, #089cf7, #0577c2); }
+.member-card.off { background: var(--card); color: var(--ink); border: 1px solid var(--line); }
+.member-card .mc-title { font-weight: 900; font-size: 15px; }
+.member-card ul { margin: 0; padding-left: 18px; font-size: 12px; }
+.member-card .mini-btn { background: #fff; color: var(--brand-ink); }
+.member-card.off .mini-btn { background: var(--brand); color: #fff; }
+
+.cta { background: var(--card); border-top: 1px solid var(--line); padding: 10px 12px; display: flex; justify-content: space-between; align-items: center; }
+.cta b { font-size: 16px; font-variant-numeric: tabular-nums; }
+.cta button { font: inherit; font-weight: 700; border: 0; background: var(--brand); color: #fff; padding: 8px 16px; border-radius: 999px; }
+
+.note { font-size: 13px; color: var(--page-fg-2); background: var(--page-card); border: 1px solid var(--page-line); border-radius: 12px; padding: 14px 16px; max-width: 72ch; }
+.note b { color: var(--page-fg); }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">CHICTRIP ESIM DEMO · PREVIEW</div>
+    <h1>訂閱會員 9 折要放在 App 的哪裡</h1>
+    <p>三個方向，算法相同，差別在訂閱出現的位置和曝光強度。範例：東京 5 天、3 人同行、選「日本 高速吃到飽」NT$399。用上方切換看「已訂閱 / 未訂閱」兩種狀態。</p>
+  </header>
+
+  <div class="rules">
+    <div class="rule"><b>月費</b><span>NT$49 / 月</span><small>示意值，尚未定價</small></div>
+    <div class="rule"><b>折扣順序</b><span>團體 9 折 → 再打訂閱 9 折</span><small>疊加，等於 81 折</small></div>
+    <div class="rule"><b>適用範圍</b><span>訂閱者下的整筆訂單</span><small>含同行旅伴的卡（假設，待確認）</small></div>
+    <div class="rule"><b>範例金額</b><span>NT$1,197 → NT$969</span><small>399 × 3，−120 團體，−108 訂閱</small></div>
+  </div>
+
+  <div class="toggle-bar">
+    <span>示範狀態</span>
+    <div class="seg" role="group" aria-label="訂閱狀態">
+      <button id="st-on" type="button" aria-pressed="true" data-state="on">已訂閱</button>
+      <button id="st-off" type="button" aria-pressed="false" data-state="off">未訂閱</button>
+    </div>
+  </div>
+
+  <!-- Direction A -->
+  <section class="dir">
+    <div class="dir-head">
+      <div class="tag">方向 A</div>
+      <h2>結帳時才出現</h2>
+      <p>只改結帳頁。已訂閱就多一行會員折扣；未訂閱就在明細下方顯示「訂閱這單再省多少」。改動最小，打擾最少。</p>
+      <div class="tradeoff"><span>改動最小，一頁搞定</span><span>在最有感的時刻講價差</span><span class="con">前面流程看不到訂閱，曝光低</span></div>
+    </div>
+    <div class="phones">
+      <div class="phone-col">
+        <div class="phone">
+          <div class="nav"><span class="back">‹</span>結帳</div>
+          <div class="body">
+            <div>這趟 <b>3 人同行</b>，一次幫全團配好</div>
+            <div class="c">
+              <div class="row"><span>你</span><span>399</span></div>
+              <div class="row"><span>小美</span><span>399</span></div>
+              <div class="row"><span>阿哲</span><span>399</span></div>
+            </div>
+            <div class="c">
+              <div class="row"><span>小計</span><span>NT$1,197</span></div>
+              <div class="row disc"><span>團體 9 折</span><span>−NT$120</span></div>
+              <div class="row member on-only"><span>訂閱會員 9 折</span><span>−NT$108</span></div>
+              <div class="row pts"><span>和泰 Points 回饋</span><span>+60</span></div>
+              <div class="row total"><span>總計</span><span><b class="v-total">NT$969</b></span></div>
+            </div>
+            <div class="upsell off-only">
+              <div>訂閱去趣會員，這單再省 <b>NT$108</b></div>
+              <div class="muted">NT$49 / 月，之後每趟 eSIM 都 9 折</div>
+              <button class="mini-btn" type="button">加入訂閱</button>
+            </div>
+          </div>
+          <div class="cta"><span class="muted">應付 <b class="v-total">NT$969</b></span><button type="button">確認付款・3 人</button></div>
+        </div>
+        <div class="phone-cap">結帳頁</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Direction B -->
+  <section class="dir">
+    <div class="dir-head">
+      <div class="tag">方向 B</div>
+      <h2>方案頁就顯示會員價</h2>
+      <p>AI 推薦的方案卡上直接並列「一般價 / 會員價」，結帳頁同方向 A。旅客在選方案時就看到訂閱的好處。</p>
+      <div class="tradeoff"><span>選方案的當下就講價差</span><span>評審一眼看懂訂閱價值</span><span class="con">方案卡資訊變多，AI 推薦理由容易被擠掉</span></div>
+    </div>
+    <div class="phones">
+      <div class="phone-col">
+        <div class="phone">
+          <div class="nav"><span class="back">‹</span>上網方案</div>
+          <div class="body">
+            <div class="muted">AI 依你的東京 5 天行程排序</div>
+            <div class="plan pick">
+              <div><span class="badge">最推薦</span></div>
+              <div class="pname">日本 高速吃到飽</div>
+              <div class="muted">三人每天導航＋限動，用量不設限最安心</div>
+              <div class="price on-only"><span class="strike">NT$399</span>會員 NT$359</div>
+              <div class="price off-only">NT$399 <span class="muted">· 會員 NT$359</span></div>
+            </div>
+            <div class="plan">
+              <div class="pname">日本 每日 1GB 高速</div>
+              <div class="price on-only"><span class="strike">NT$249</span>會員 NT$224</div>
+              <div class="price off-only">NT$249 <span class="muted">· 會員 NT$224</span></div>
+            </div>
+            <div class="plan">
+              <div class="pname">日本 10GB 定量</div>
+              <div class="price on-only"><span class="strike">NT$299</span>會員 NT$269</div>
+              <div class="price off-only">NT$299 <span class="muted">· 會員 NT$269</span></div>
+            </div>
+            <div class="muted off-only">訂閱去趣會員 NT$49 / 月，所有 eSIM 9 折</div>
+          </div>
+          <div class="cta"><span class="muted">已選 1 個方案</span><button type="button">下一步</button></div>
+        </div>
+        <div class="phone-cap">上網方案頁（結帳頁同方向 A）</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Direction C -->
+  <section class="dir">
+    <div class="dir-head">
+      <div class="tag">方向 C</div>
+      <h2>「我的」頁會員卡 + 結帳一行</h2>
+      <p>把訂閱做成會員身分：「我的」頁有一張會員卡列出權益，結帳頁同方向 A。Demo 時可以直接在「我的」頁切換訂閱狀態，現場示範兩種價格。</p>
+      <div class="tradeoff"><span>像真的會員制度，商業故事完整</span><span>Demo 好操作，一鍵切狀態</span><span class="con">多一張畫面要做</span></div>
+    </div>
+    <div class="phones">
+      <div class="phone-col">
+        <div class="phone">
+          <div class="nav">我的</div>
+          <div class="body">
+            <div class="row" style="justify-content:flex-start;gap:10px"><span class="badge" style="font-size:14px;padding:6px 11px">V</span><span><b>Vivian</b><br><span class="muted">和泰會員 · 1,240 Points</span></span></div>
+            <div class="member-card on-only">
+              <div class="row"><span class="mc-title">去趣訂閱會員</span><span class="badge gold">已訂閱</span></div>
+              <ul><li>所有 eSIM 9 折，可與團體 9 折疊加</li><li>今年已省 NT$108</li></ul>
+              <div style="font-size:12px;opacity:.85">NT$49 / 月 · 下次扣款 11/05</div>
+            </div>
+            <div class="member-card off off-only">
+              <div class="mc-title">加入去趣訂閱會員</div>
+              <ul><li>所有 eSIM 9 折，可與團體 9 折疊加</li><li>這趟東京 3 人可再省 NT$108</li></ul>
+              <button class="mini-btn" type="button">NT$49 / 月 加入</button>
+            </div>
+            <div class="muted">切換示範行程</div>
+            <div class="c"><div class="row"><span>🗼 東京 3 人 5 天</span><span style="color:var(--brand)">✓</span></div></div>
+          </div>
+        </div>
+        <div class="phone-cap">「我的」頁（結帳頁同方向 A）</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="note"><b>我的建議：C。</b>結帳那一行三個方向都有，C 多的是一張會員卡。它讓訂閱看起來是真的會員制度，對應企劃 P09，Demo 時也能在「我的」頁一鍵切狀態，現場對照兩種價格。B 的會員價放在方案卡上，可以之後再加。</div>
+</div>
+
+<script>
+(function () {
+  const btns = document.querySelectorAll('.seg button');
+  function apply(state) {
+    const on = state === 'on';
+    document.querySelectorAll('.on-only').forEach(el => { el.hidden = !on; });
+    document.querySelectorAll('.off-only').forEach(el => { el.hidden = on; });
+    document.querySelectorAll('.v-total').forEach(el => { el.textContent = on ? 'NT$969' : 'NT$1,077'; });
+    btns.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.state === state)));
+  }
+  btns.forEach(b => b.addEventListener('click', () => apply(b.dataset.state)));
+  apply('on');
+})();
+</script>
