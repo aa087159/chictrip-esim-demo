@@ -3,7 +3,7 @@ import type { Plan } from "./api";
 // 2 人以上團體購折扣（去趣獨有的共編行程 → 一趟多賣幾張的誘因）。
 export const GROUP_DISCOUNT_RATE = 0.1;
 
-// 訂閱會員：整筆訂單（含同行旅伴）再打 9 折，疊加在團體折扣之後。月費為示意值，尚未定價。
+// 訂閱會員：整筆訂單（含同行旅伴）再打 9 折，疊加在團體折扣之後。權益第一版只含 eSIM 9 折。
 export const SUBSCRIPTION_DISCOUNT_RATE = 0.1;
 export const SUBSCRIPTION_MONTHLY_TWD = 49;
 
