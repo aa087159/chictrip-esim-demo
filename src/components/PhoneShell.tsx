@@ -6,7 +6,7 @@ const TABS: { id: Tab; icon: string; label: string }[] = [
   { id: "home", icon: "🏠", label: "首頁" },
   { id: "explore", icon: "🧭", label: "探索" },
   { id: "trip", icon: "🗺️", label: "行程" },
-  { id: "me", icon: "👤", label: "我的" },
+  { id: "me", icon: "👤", label: "會員" },
 ];
 
 interface Props {

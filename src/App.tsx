@@ -8,7 +8,9 @@ import { CheckoutScreen } from "./screens/CheckoutScreen";
 import { SuccessScreen } from "./screens/SuccessScreen";
 import { ChatScreen } from "./screens/ChatScreen";
 import { MeScreen } from "./screens/MeScreen";
-import { PlaceholderScreen } from "./screens/PlaceholderScreen";
+import { HomeScreen } from "./screens/HomeScreen";
+import { ExploreScreen } from "./screens/ExploreScreen";
+import type { DemoPhase } from "./data/demo-phase";
 import { CompanionScreen } from "./screens/CompanionScreen";
 import { getCompanionScenario } from "./data/companion-scenarios";
 
@@ -31,6 +33,8 @@ export function App() {
   const [error, setError] = useState<string | null>(null);
   const [pickedPlanId, setPickedPlanId] = useState<string | null>(null);
   const [isSubscribed, setIsSubscribed] = useState(false);
+  // Demo 時間切換器的目前時間點，驅動首頁狀態卡與通知中心
+  const [phase, setPhase] = useState<DemoPhase>("planned");
 
   const persona = PERSONAS.find((p) => p.id === personaId) ?? PERSONAS[0];
   const activePlanId = pickedPlanId ?? recommendation?.recommendedPlanId ?? "";
@@ -38,6 +42,7 @@ export function App() {
     recommendation?.plans.find((p) => p.id === activePlanId) ?? recommendation?.plan ?? null;
 
   const view = stack[stack.length - 1];
+  const networkPlanName = recommendation ? (activePlan?.name ?? null) : null;
 
   function push(v: TripView) {
     setStack((s) => [...s, v]);
@@ -65,6 +70,21 @@ export function App() {
   function openNetwork() {
     push("plan");
     if (!recommendation && !loading) void fetchRecommendation(persona);
+  }
+
+  // 從首頁 / 探索跳進行程分頁的入口：先回到行程頁，讓返回鍵落在行程上。
+  function goToTrip() {
+    setStack(["trip"]);
+    setTab("trip");
+  }
+  function goToNetwork() {
+    setStack(["trip", "plan"]);
+    setTab("trip");
+    if (!recommendation && !loading) void fetchRecommendation(persona);
+  }
+  function goToCompanion() {
+    setStack(["trip", "companion"]);
+    setTab("trip");
   }
 
   function pickPersona(p: Persona) {
@@ -132,7 +152,7 @@ export function App() {
         return (
           <TripScreen
             itinerary={persona.itinerary}
-            networkPlanName={recommendation ? (activePlan?.name ?? null) : null}
+            networkPlanName={networkPlanName}
             onOpenNetwork={openNetwork}
             onOpenCompanion={() => push("companion")}
           />
@@ -143,9 +163,18 @@ export function App() {
   function renderTab() {
     switch (tab) {
       case "home":
-        return <PlaceholderScreen title="首頁" note="探索靈感、熱門行程與優惠都在這（Demo 略）" />;
+        return (
+          <HomeScreen
+            phase={phase}
+            onPhase={setPhase}
+            onOpenTrip={goToTrip}
+            onOpenNetwork={goToNetwork}
+            onOpenCompanion={goToCompanion}
+            onOpenExplore={() => setTab("explore")}
+          />
+        );
       case "explore":
-        return <PlaceholderScreen title="探索" note="景點、攻略與美食清單（Demo 略）" />;
+        return <ExploreScreen itinerary={persona.itinerary} onOpenNetwork={goToNetwork} />;
       case "me":
         return (
           <MeScreen

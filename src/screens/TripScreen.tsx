@@ -1,5 +1,6 @@
 import type { Itinerary } from "../lib/api";
 import { flagOf } from "../lib/format";
+import { UsageGauge } from "../components/UsageGauge";
 
 interface Props {
   itinerary: Itinerary;
@@ -88,6 +89,7 @@ export function TripScreen({
       {networkPlanName && (
         <div className="trip-section">
           <div className="trip-section-h">旅途中</div>
+          <UsageGauge onTopUp={onOpenNetwork} />
           <button className="alert-card" onClick={onOpenCompanion}>
             <span className="alert-ic">⛈️</span>
             <span className="alert-body">
