@@ -1,20 +1,15 @@
 import { useState } from "react";
 import { PLAN_COLLAGE, SPOTS, type SpotCategory } from "../data/feed";
-import {
-  DEMO_PHASES,
-  NOTIFICATIONS,
-  STATUS_CARD,
-  type DemoAction,
-  type DemoPhase,
-} from "../data/demo-phase";
+import { DEMO_PHASES, phaseContent, type DemoAction, type DemoPhase } from "../data/demo-phase";
 import { useDemoToast } from "../lib/useDemoToast";
 
 interface Props {
   phase: DemoPhase;
+  isPurchased: boolean;
   onPhase: (phase: DemoPhase) => void;
   onOpenTrip: () => void;
-  onOpenNetwork: () => void;
-  onOpenCompanion: () => void;
+  // 狀態卡、通知、eSIM 捷徑點了之後要去的畫面（回購券除外，首頁自己顯示提示）。
+  onAction: (action: Exclude<DemoAction, "coupon">) => void;
   onOpenExplore: () => void;
 }
 
@@ -49,10 +44,10 @@ const RANK_SIZE = 5;
 
 export function HomeScreen({
   phase,
+  isPurchased,
   onPhase,
   onOpenTrip,
-  onOpenNetwork,
-  onOpenCompanion,
+  onAction,
   onOpenExplore,
 }: Props) {
   const toast = useDemoToast();
@@ -64,8 +59,7 @@ export function HomeScreen({
   const [rankCategory, setRankCategory] = useState<SpotCategory>("景點");
   const [likedIds, setLikedIds] = useState<Set<string>>(new Set());
 
-  const status = STATUS_CARD[phase];
-  const notifications = NOTIFICATIONS[phase];
+  const { status, notifications } = phaseContent(phase, isPurchased);
   const hasUnread = seenPhase !== phase;
   const isStatusVisible = dismissedPhase !== phase;
   const ranking = SPOTS.filter((s) => s.category === rankCategory)
@@ -73,9 +67,8 @@ export function HomeScreen({
     .slice(0, RANK_SIZE);
 
   function runAction(action: DemoAction) {
-    if (action === "network") onOpenNetwork();
-    else if (action === "companion") onOpenCompanion();
-    else toast.show("已領取回購券，下次結帳自動折抵");
+    if (action === "coupon") toast.show("已領取回購券，下次購買自動折抵");
+    else onAction(action);
   }
 
   function openInbox() {
@@ -93,7 +86,7 @@ export function HomeScreen({
   }
 
   function onShortcut(id: string) {
-    if (id === "esim") onOpenNetwork();
+    if (id === "esim") onAction(isPurchased ? "team" : "network");
     else if (id === "inspire") onOpenExplore();
     else toast.show();
   }
@@ -241,6 +234,7 @@ export function HomeScreen({
                 ×
               </button>
             </div>
+            {notifications.length === 0 && <div className="inbox-empty">目前沒有通知</div>}
             {notifications.map((n) => (
               <button
                 key={n.id}

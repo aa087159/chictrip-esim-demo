@@ -66,7 +66,7 @@ export function ExploreScreen({ itinerary, onOpenNetwork }: Props) {
     <button key="network-card" className="net-card" onClick={onOpenNetwork}>
       <span className="net-card-kicker">📶 這趟上網怎麼辦</span>
       <span className="net-card-title">{tripLabel}，AI 算好方案</span>
-      <span className="net-card-sub">依每日行程估流量，一鍵幫全團配好</span>
+      <span className="net-card-sub">依每日行程估流量，每個人各配一張</span>
       <span className="net-card-cta">看推薦方案 ›</span>
     </button>
   );

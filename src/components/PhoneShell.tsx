@@ -35,7 +35,10 @@ export function PhoneShell({ tab, onTab, children }: Props) {
           </span>
         </div>
 
-        <div className="screen-body">{children}</div>
+        <div className="screen-body">
+          {children}
+          <span className="demo-badge">示意資料</span>
+        </div>
 
         <nav className="tabbar">
           {TABS.map((t) => (

@@ -1,14 +1,11 @@
 import { PERSONAS, type Persona } from "../data/personas";
-import { SUBSCRIPTION_MONTHLY_TWD } from "../lib/order";
 
 interface Props {
   currentId: string;
   onPick: (persona: Persona) => void;
-  isSubscribed: boolean;
-  onToggleSubscription: () => void;
 }
 
-export function MeScreen({ currentId, onPick, isSubscribed, onToggleSubscription }: Props) {
+export function MeScreen({ currentId, onPick }: Props) {
   return (
     <div className="me">
       <div className="me-head">
@@ -17,22 +14,6 @@ export function MeScreen({ currentId, onPick, isSubscribed, onToggleSubscription
           <div className="me-name">Vivian</div>
           <div className="me-sub">和泰會員 · 1,240 Points</div>
         </div>
-      </div>
-
-      <div className={`member-card${isSubscribed ? " on" : ""}`}>
-        <div className="member-card-head">
-          <span className="member-card-title">
-            {isSubscribed ? "去趣訂閱會員" : "加入去趣訂閱會員"}
-          </span>
-          {isSubscribed && <span className="member-card-badge">已訂閱</span>}
-        </div>
-        <ul className="member-card-perks">
-          <li>所有 eSIM 9 折，整筆訂單（含同行旅伴）適用</li>
-          <li>可與團體 9 折疊加</li>
-        </ul>
-        <button className="member-card-btn" onClick={onToggleSubscription}>
-          {isSubscribed ? "Demo：切換為未訂閱" : `NT$${SUBSCRIPTION_MONTHLY_TWD} / 月 加入`}
-        </button>
       </div>
 
       <div className="me-section-title">切換示範行程</div>
@@ -52,7 +33,7 @@ export function MeScreen({ currentId, onPick, isSubscribed, onToggleSubscription
           </button>
         ))}
       </div>
-      <div className="me-note">Demo：切換行程即可展示不同情境（個人 / 情侶 / 揪團）</div>
+      <div className="me-note">Demo：同樣 4 個人換一份行程，AI 推薦的方案就不一樣</div>
     </div>
   );
 }

@@ -1,46 +1,16 @@
-// Frontend-facing types + fetch helpers. Types mirror api/_lib on the server.
+// Frontend-facing types + fetch helpers. Types come straight from api/_lib
+// (type-only imports, erased at build) so the two sides cannot drift apart.
+import type { Plan } from "../../api/_lib/catalog";
+import type { DayPlan, Member, TripInput } from "../../api/_lib/estimate";
+import type { Recommendation } from "../../api/_lib/recommend";
 
-export interface DayPlan {
-  day: string; // e.g. "D1" / "D3–5"
-  spots: string; // e.g. "淺草寺 → 晴空塔 → 上野"
-}
+export type { Plan, DayPlan, Member, Recommendation };
 
-export interface Itinerary {
-  destination: string;
-  countryCode: string;
-  days: number;
+export interface Itinerary extends TripInput {
+  // Presentation-only fields for the itinerary view.
+  dateRange: string;
   travelers: number;
-  habits: string[];
-  notes?: string;
-  // Presentation-only fields for the itinerary view. The recommend API ignores
-  // any it doesn't use, so they ride along harmlessly.
-  dateRange?: string; // e.g. "9/26–9/30"
-  companions?: string[]; // 同行者名字，不含「你」本人
-  dayPlan?: DayPlan[];
-}
-
-export interface Plan {
-  id: string;
-  countryCode: string;
-  countryName: string;
-  name: string;
-  type: "unlimited" | "daily" | "fixed";
-  dataGB?: number;
-  dailyGB?: number;
-  priceTWD: number;
-  pointsPct: number;
-  highlight?: string;
-}
-
-export interface Recommendation {
-  recommendedPlanId: string;
-  estimatedDataGB: number;
-  reasoning: string;
-  breakdown: { activity: string; gb: number }[];
-  upsellHint?: string;
-  plan: Plan | null;
-  // 該國所有適用方案，依推薦度排序（最推薦在最前）。
-  plans: Plan[];
+  companions: string[]; // 同行者名字，不含「你」本人
 }
 
 export interface ChatMessage {
@@ -59,8 +29,8 @@ async function postJSON<T>(url: string, body: unknown): Promise<T> {
   return data as T;
 }
 
-export const postRecommend = (itinerary: Itinerary) =>
-  postJSON<Recommendation>("/api/recommend", itinerary);
+export const postRecommend = ({ destination, countryCode, days, dayPlan, members }: Itinerary) =>
+  postJSON<Recommendation>("/api/recommend", { destination, countryCode, days, dayPlan, members });
 
 export const postChat = (messages: ChatMessage[]) =>
   postJSON<{ reply: string }>("/api/chat", { messages });

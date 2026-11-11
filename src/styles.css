@@ -597,7 +597,7 @@ body {
   font-size: 16px;
 }
 
-/* ---- Sticky CTA bar (plan + checkout) ---- */
+/* ---- Sticky CTA bar (plan + handoff + top-up) ---- */
 .cta-bar {
   flex: none;
   display: flex;
@@ -640,25 +640,6 @@ body {
   background: var(--brand-ink);
   transform: translateY(-1px);
 }
-
-/* ---- Checkout screen ---- */
-.checkout-screen {
-  flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-.checkout-head {
-  font-size: 14px;
-  font-weight: 700;
-  line-height: 1.5;
-}
-.checkout-head b {
-  color: var(--brand-ink);
-}
 .cart {
   display: flex;
   flex-direction: column;
@@ -688,172 +669,6 @@ body {
   font-variant-numeric: tabular-nums;
   color: var(--ink-3);
   font-size: 13px;
-}
-.sum {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 2px;
-}
-.sum-row {
-  display: flex;
-  justify-content: space-between;
-  font-size: 13.5px;
-  color: var(--ink-2);
-  font-variant-numeric: tabular-nums;
-}
-.sum-row.disc {
-  color: var(--good);
-}
-.sum-row.pts {
-  color: var(--accent-ink);
-}
-.sum-row.total {
-  color: var(--ink);
-  font-weight: 800;
-  padding-top: 11px;
-  border-top: 1px solid var(--line);
-}
-.sum-row.total b {
-  font-size: 19px;
-}
-.sum-row.member {
-  color: var(--brand-ink);
-  font-weight: 700;
-}
-.sub-upsell {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-size: 13px;
-  border: 1.5px dashed var(--brand);
-  background: var(--brand-soft);
-  border-radius: 12px;
-  padding: 11px 13px;
-}
-.sub-upsell b {
-  color: var(--brand-ink);
-}
-.sub-upsell small {
-  font-size: 12px;
-  color: var(--ink-3);
-}
-.sub-btn {
-  align-self: flex-start;
-  font-family: inherit;
-  font-size: 12.5px;
-  font-weight: 800;
-  border: 0;
-  border-radius: 999px;
-  padding: 6px 14px;
-  background: var(--brand);
-  color: #fff;
-  cursor: pointer;
-}
-.nudge {
-  font-size: 12.5px;
-  color: var(--accent-ink);
-  background: var(--accent-soft);
-  border-radius: 12px;
-  padding: 11px 13px;
-}
-.pay-with {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--ink-2);
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 13px 14px;
-  background: var(--card);
-}
-.pay-dot {
-  width: 22px;
-  height: 22px;
-  border-radius: 6px;
-  background: linear-gradient(135deg, #46bcff, var(--brand));
-  flex: none;
-}
-
-/* ---- Success screen ---- */
-.success {
-  flex: 1;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: 30px 24px;
-  gap: 8px;
-}
-.success-check {
-  width: 68px;
-  height: 68px;
-  border-radius: 50%;
-  background: var(--good);
-  color: #fff;
-  font-size: 36px;
-  display: grid;
-  place-items: center;
-  box-shadow: 0 12px 28px rgba(23, 178, 106, 0.4);
-  animation: pop 0.4s cubic-bezier(0.2, 1.3, 0.5, 1);
-}
-.success-title {
-  font-size: 21px;
-  font-weight: 800;
-  margin-top: 10px;
-}
-.success-plan {
-  font-size: 14px;
-  color: var(--brand-ink);
-  font-weight: 700;
-}
-.success-qr {
-  width: 130px;
-  height: 130px;
-  margin: 18px 0 6px;
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: var(--shadow);
-  display: grid;
-  place-items: center;
-  background-image: radial-gradient(var(--ink) 1.4px, transparent 1.5px);
-  background-size: 11px 11px;
-}
-.qr-grid {
-  width: 42px;
-  height: 42px;
-  border-radius: 10px;
-  background: var(--brand);
-  display: grid;
-  place-items: center;
-}
-.qr-grid::after {
-  content: "▶";
-  color: #fff;
-  font-size: 17px;
-  padding-left: 2px;
-}
-.success-hint {
-  font-size: 13px;
-  line-height: 1.7;
-  color: var(--ink-2);
-  max-width: 26ch;
-}
-.success-shared {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--good);
-  background: var(--good-soft);
-  padding: 8px 12px;
-  border-radius: 999px;
-  margin-top: 4px;
-}
-.success .cta-btn {
-  margin-top: 22px;
-  width: 100%;
 }
 
 /* ---- Chat screen ---- */
@@ -991,61 +806,6 @@ body {
   font-size: 12.5px;
   color: var(--accent-ink);
   font-weight: 700;
-}
-.member-card {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 15px 16px;
-  margin-bottom: 18px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--card);
-}
-.member-card.on {
-  border-color: transparent;
-  background: linear-gradient(135deg, var(--brand), var(--brand-ink));
-  color: #fff;
-}
-.member-card-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-}
-.member-card-title {
-  font-size: 15px;
-  font-weight: 800;
-}
-.member-card-badge {
-  font-size: 11px;
-  font-weight: 800;
-  padding: 2px 9px;
-  border-radius: 999px;
-  background: var(--accent);
-  color: #fff;
-}
-.member-card-perks {
-  margin: 0;
-  padding-left: 18px;
-  font-size: 12.5px;
-  line-height: 1.6;
-}
-.member-card-btn {
-  align-self: flex-start;
-  font-family: inherit;
-  font-size: 12.5px;
-  font-weight: 800;
-  border: 0;
-  border-radius: 999px;
-  padding: 6px 14px;
-  background: var(--brand);
-  color: #fff;
-  cursor: pointer;
-}
-.member-card.on .member-card-btn {
-  background: rgba(255, 255, 255, 0.92);
-  color: var(--brand-ink);
 }
 .me-section-title {
   font-size: 12px;
@@ -2301,7 +2061,7 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .screen-view,
-  .success-check,
+  .handoff-spinner,
   .bubble {
     animation: none;
   }
@@ -2337,4 +2097,376 @@ body {
   .statusbar {
     display: flex;
   }
+}
+
+/* ---- Demo-data label (always visible: every number in the demo is 示意) ---- */
+.demo-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 40;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--ink-3);
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 2px 7px;
+  pointer-events: none;
+}
+
+.inbox-empty {
+  padding: 18px 16px;
+  font-size: 13px;
+  color: var(--ink-3);
+  text-align: center;
+}
+
+/* ---- Per-member plan card (plan screen) ---- */
+.member-plan {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 14px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.member-plan-head,
+.team-card-top,
+.verdict-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.member-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--brand-soft);
+  color: var(--brand-ink);
+  font-weight: 800;
+  font-size: 14px;
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+.member-plan-who,
+.team-card-who {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+}
+.member-plan-who b,
+.team-card-who b {
+  font-size: 14.5px;
+}
+.member-plan-who small,
+.team-card-who small {
+  font-size: 11.5px;
+  color: var(--ink-3);
+}
+.member-plan-gb {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--brand-ink);
+  font-variant-numeric: tabular-nums;
+}
+.member-plan-pick {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.member-plan-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 800;
+}
+.member-plan-price {
+  font-size: 15px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.member-plan-reason {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--ink-2);
+  background: var(--surface);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+.plan-facts {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--ink-2);
+}
+.member-plan-toggle {
+  align-self: flex-start;
+  border: 0;
+  background: none;
+  padding: 0;
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--brand-ink);
+  cursor: pointer;
+}
+
+/* ---- Handoff (redirect to the purchase page) ---- */
+.handoff,
+.team,
+.activation,
+.topup {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.handoff-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 18px 0 8px;
+  text-align: center;
+}
+.handoff-hero b {
+  font-size: 16px;
+}
+.handoff-hero small,
+.handoff-note,
+.topup-note {
+  font-size: 12.5px;
+  color: var(--ink-3);
+  line-height: 1.6;
+}
+.handoff-note,
+.topup-note {
+  text-align: center;
+}
+.handoff-spinner {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 3px solid var(--brand-soft);
+  border-top-color: var(--brand);
+  animation: spin 0.9s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.cart-total .cart-who {
+  width: auto;
+  color: var(--ink);
+}
+.cart-total .cart-amt {
+  color: var(--ink);
+  font-weight: 800;
+}
+
+/* ---- Team cards (step 4) ---- */
+.team-head,
+.activation-head {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.team-head b,
+.activation-head b {
+  font-size: 16px;
+}
+.team-head small,
+.activation-head small {
+  font-size: 12px;
+  color: var(--ink-3);
+}
+.team-card,
+.verdict,
+.check-row {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 13px 14px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.team-card-body {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.mini-qr {
+  flex: none;
+  color: var(--ink);
+  border-radius: 8px;
+  border: 1px solid var(--line);
+}
+.team-card-plan {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.team-card-plan b {
+  font-size: 14px;
+}
+.team-card-plan small {
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+.addon-tag {
+  align-self: flex-start;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--accent-ink);
+  background: var(--accent-soft);
+  border-radius: 7px;
+  padding: 2px 8px;
+}
+.install-pill {
+  margin-left: auto;
+  font-size: 11.5px;
+  font-weight: 800;
+  border-radius: 999px;
+  padding: 3px 9px;
+  white-space: nowrap;
+}
+.install-pill.pending {
+  color: var(--accent-ink);
+  background: var(--accent-soft);
+}
+.install-pill.installed {
+  color: var(--brand-ink);
+  background: var(--brand-soft);
+}
+.install-pill.active {
+  color: var(--good);
+  background: var(--good-soft);
+}
+.team-card-btn,
+.check-btn {
+  align-self: flex-start;
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 800;
+  border: 1.5px solid var(--brand);
+  border-radius: 999px;
+  padding: 6px 14px;
+  background: var(--card);
+  color: var(--brand-ink);
+  cursor: pointer;
+}
+.check-btn.primary {
+  background: var(--brand);
+  color: #fff;
+}
+
+/* ---- Activation check (step 5) ---- */
+.check-row.done {
+  border-color: var(--good);
+  background: var(--good-soft);
+}
+.check-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.check-no {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--surface);
+  font-size: 12px;
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+.check-row.done .check-no {
+  background: var(--good);
+  color: #fff;
+}
+.check-title {
+  font-size: 14px;
+  font-weight: 700;
+}
+.check-hint {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.65;
+  color: var(--ink-2);
+  background: var(--surface);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+.check-actions {
+  display: flex;
+  gap: 8px;
+}
+.activation-done,
+.topup-done {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: var(--good);
+  background: var(--good-soft);
+  border-radius: 12px;
+  padding: 12px 14px;
+  text-align: center;
+}
+.topup-done {
+  flex: 1;
+}
+.human-link {
+  align-self: center;
+  border: 0;
+  background: none;
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--ink-3);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* ---- Top-up check (step 6) ---- */
+.topup-change {
+  background: var(--accent-soft);
+  border-radius: var(--radius);
+  padding: 13px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 14px;
+}
+.verdict.needs {
+  border-color: var(--accent);
+}
+.verdict-top b {
+  font-size: 14.5px;
+}
+.verdict-reason {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--ink-2);
 }

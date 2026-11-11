@@ -1,58 +1,64 @@
 import { NavBar } from "../components/NavBar";
 import { StepLoader } from "../components/StepLoader";
 import { UsageEstimate } from "../components/UsageEstimate";
-import { PlanOptions } from "../components/PlanOptions";
-import { orderSummary } from "../lib/order";
+import { MemberPlanCard } from "../components/MemberPlanCard";
 import type { Itinerary, Plan, Recommendation } from "../lib/api";
 
 interface Props {
   itinerary: Itinerary;
   recommendation: Recommendation | null;
-  activePlan: Plan | null;
   loading: boolean;
   error: string | null;
-  selectedPlanId: string;
-  isSubscribed: boolean;
-  onSelect: (planId: string) => void;
+  // 每位旅伴目前選的方案（預設是 AI 推薦，可以換）。
+  selectedPlans: Record<string, Plan>;
+  onSelect: (memberId: string, planId: string) => void;
   onBack: () => void;
-  onCheckout: () => void;
+  onGoBuy: () => void;
   onOpenChat: () => void;
 }
 
 export function PlanScreen({
   itinerary,
   recommendation,
-  activePlan,
   loading,
   error,
-  selectedPlanId,
-  isSubscribed,
+  selectedPlans,
   onSelect,
   onBack,
-  onCheckout,
+  onGoBuy,
   onOpenChat,
 }: Props) {
-  const isGroup = itinerary.travelers > 1;
-  const order = activePlan ? orderSummary(activePlan, itinerary.travelers, isSubscribed) : null;
+  const total = Object.values(selectedPlans).reduce((sum, p) => sum + p.priceTWD, 0);
+  const count = Object.keys(selectedPlans).length;
+  const isReady = recommendation !== null && !loading;
 
   return (
     <>
-      <NavBar title="上網方案" onBack={onBack} />
+      <NavBar title="這趟的網路" onBack={onBack} />
       <div className="plan-screen">
         {loading && <StepLoader />}
         {error && !loading && <div className="error">出錯了：{error}</div>}
-        {recommendation && !loading && (
+        {isReady && recommendation && (
           <>
-            <UsageEstimate recommendation={recommendation} perPerson={isGroup} />
-            <PlanOptions
-              plans={recommendation.plans}
-              recommendedId={recommendation.recommendedPlanId}
-              selectedId={selectedPlanId}
-              estimatedDataGB={recommendation.estimatedDataGB}
-              days={itinerary.days}
-              perPerson={isGroup}
-              onSelect={onSelect}
-            />
+            <UsageEstimate recommendation={recommendation} />
+            <div className="plan-list-head">每個人各配一張</div>
+            {itinerary.members.map((m) => {
+              const pick = recommendation.members.find((p) => p.memberId === m.id);
+              if (!pick) return null;
+              return (
+                <MemberPlanCard
+                  key={m.id}
+                  member={m}
+                  plan={selectedPlans[m.id] ?? null}
+                  recommendedPlanId={pick.planId}
+                  estimatedDataGB={pick.estimatedDataGB}
+                  reason={pick.reason}
+                  plans={recommendation.plans}
+                  days={itinerary.days}
+                  onSelect={(planId) => onSelect(m.id, planId)}
+                />
+              );
+            })}
             <button className="ask-ai" onClick={onOpenChat}>
               <span className="ask-ai-ic">💬</span>
               有疑問？問 AI 上網管家（相容性 / 開通 / 退費）
@@ -61,16 +67,14 @@ export function PlanScreen({
         )}
       </div>
 
-      {order && !loading && (
+      {isReady && count > 0 && (
         <div className="cta-bar">
           <div className="cta-bar-info">
-            <span className="cta-bar-label">
-              {isGroup ? `${order.travelers} 人合計` : "合計"}
-            </span>
-            <span className="cta-bar-total">NT${order.total.toLocaleString()}</span>
+            <span className="cta-bar-label">{count} 張・原價合計</span>
+            <span className="cta-bar-total">NT${total.toLocaleString()}</span>
           </div>
-          <button className="cta-btn" onClick={onCheckout}>
-            {isGroup ? `幫全團配好 →` : "下一步 →"}
+          <button className="cta-btn" onClick={onGoBuy}>
+            去購買 ›
           </button>
         </div>
       )}

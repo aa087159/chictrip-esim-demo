@@ -1,4 +1,5 @@
 import type { Plan } from "../lib/api";
+import { capacityGB } from "../../api/_lib/estimate";
 
 interface Props {
   plans: Plan[]; // 已依推薦度排序，最推薦在最前
@@ -6,14 +7,7 @@ interface Props {
   selectedId: string;
   estimatedDataGB: number;
   days: number;
-  perPerson: boolean;
   onSelect: (planId: string) => void;
-}
-
-function capacityGB(plan: Plan, days: number): number {
-  if (plan.type === "unlimited") return Infinity;
-  if (plan.type === "daily") return (plan.dailyGB ?? 0) * days;
-  return plan.dataGB ?? 0;
 }
 
 function specLabel(plan: Plan): string {
@@ -40,12 +34,11 @@ export function PlanOptions({
   selectedId,
   estimatedDataGB,
   days,
-  perPerson,
   onSelect,
 }: Props) {
   return (
     <div className="plan-list" role="radiogroup" aria-label="適用方案">
-      <div className="plan-list-head">共 {plans.length} 個方案適用・依推薦度排序</div>
+      <div className="plan-list-head">共 {plans.length} 個方案可選</div>
       {plans.map((plan) => {
         const isRecommended = plan.id === recommendedId;
         const isSelected = plan.id === selectedId;
@@ -74,7 +67,7 @@ export function PlanOptions({
             <span className="plan-price">
               <span className="plan-amt">
                 <b>NT${plan.priceTWD.toLocaleString()}</b>
-                <small>{perPerson ? "/人" : "起"}</small>
+                <small>起</small>
               </span>
               <span className="plan-points">回饋 {points} Points</span>
             </span>

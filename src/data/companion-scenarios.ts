@@ -17,86 +17,60 @@ export interface CompanionScenario {
 }
 
 const COMPANION_SCENARIOS: Record<string, CompanionScenario> = {
-  "tokyo-group": {
+  "tokyo-drive": {
     day: "D2",
-    timeWindow: "15:00–17:00",
+    timeWindow: "13:00–17:00",
     alertHeadline: "大雨特報",
-    originalSpot: "台場海濱公園",
+    originalSpot: "東京迪士尼海洋 戶外遊行與園區散步",
     planB: [
+      {
+        id: "disney-indoor",
+        name: "園內室內設施路線",
+        tag: "室內・不用離園",
+        note: "下午改排室內設施與表演，門票不浪費",
+      },
+      {
+        id: "ikspiari",
+        name: "IKSPIARI 購物中心",
+        tag: "室內購物美食",
+        note: "就在舞濱站旁，4 個人逛街配晚餐",
+      },
       {
         id: "teamlab",
         name: "teamLab Planets TOKYO",
         tag: "室內・沉浸展覽",
-        note: "走路 10 分鐘內，雨天照樣拍限動",
-      },
-      {
-        id: "aquacity",
-        name: "AQUA CiTY 台場",
-        tag: "室內購物美食",
-        note: "3 人可以逛街配晚餐，不用淋雨移動",
-      },
-      {
-        id: "ginza-six",
-        name: "GINZA SIX 地下街",
-        tag: "室內選物",
-        note: "銀座行程順路改室內，路線不繞遠",
+        note: "電車 20 分鐘，雨天照樣拍限動",
       },
     ],
   },
-  "tokyo-solo": {
-    day: "D1",
-    timeWindow: "14:00–16:00",
+  "kansai-slow": {
+    day: "D3",
+    timeWindow: "10:00–15:00",
     alertHeadline: "大雨特報",
-    originalSpot: "原宿竹下通",
+    originalSpot: "奈良公園餵鹿",
     planB: [
       {
-        id: "omotesando-hills",
-        name: "表參道之丘",
-        tag: "室內選物",
-        note: "同一條路上，雨天照樣逛得到限動景",
+        id: "nara-museum",
+        name: "奈良國立博物館",
+        tag: "室內博物館",
+        note: "就在奈良公園旁，路線不用改",
       },
       {
-        id: "shibuya-sky",
-        name: "SHIBUYA SKY 展望台",
-        tag: "室內展望",
-        note: "換個角度拍東京，避開竹下通人潮＋雨",
+        id: "todaiji",
+        name: "東大寺大佛殿",
+        tag: "室內參觀",
+        note: "原本就在行程上，先排進雨最大的時段",
       },
       {
-        id: "meiji-jingu-museum",
-        name: "明治神宮博物館",
-        tag: "室內",
-        note: "安靜室內空間，雨天行程不斷電",
-      },
-    ],
-  },
-  "seoul-couple": {
-    day: "D2",
-    timeWindow: "16:00–18:00",
-    alertHeadline: "大雨特報",
-    originalSpot: "首爾林",
-    planB: [
-      {
-        id: "daelim-museum",
-        name: "大林美術館",
-        tag: "室內美術館",
-        note: "聖水洞內，適合情侶慢慢逛",
-      },
-      {
-        id: "lcdc-seoul",
-        name: "LCDC SEOUL",
-        tag: "室內選物空間",
-        note: "咖啡＋選物一次滿足，雨天不用移動太遠",
-      },
-      {
-        id: "coex-mall",
-        name: "COEX 地下商場",
-        tag: "室內商場",
-        note: "江南地下街逛到飽，跳過整場雨",
+        id: "higashimuki",
+        name: "東向商店街",
+        tag: "有屋頂商店街",
+        note: "近鐵奈良站出來就到，媽媽走起來也輕鬆",
       },
     ],
   },
 };
 
 export function getCompanionScenario(personaId: string): CompanionScenario {
-  return COMPANION_SCENARIOS[personaId] ?? COMPANION_SCENARIOS["tokyo-group"];
+  return COMPANION_SCENARIOS[personaId] ?? COMPANION_SCENARIOS["tokyo-drive"];
 }
