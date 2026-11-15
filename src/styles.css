@@ -596,6 +596,46 @@ body {
 .ask-ai-ic {
   font-size: 16px;
 }
+.plan-trip {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--ink);
+}
+.buy-now {
+  background: var(--good-soft);
+  border-radius: 13px;
+  padding: 12px 14px;
+}
+.buy-now-head {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--good);
+  margin-bottom: 6px;
+}
+.buy-now ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 6px;
+}
+.buy-now li {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  font-size: 12.5px;
+}
+.buy-now li b {
+  font-weight: 800;
+  color: var(--ink);
+}
+.buy-now li b::before {
+  content: "✓ ";
+  color: var(--good);
+}
+.buy-now li span {
+  color: var(--ink-2);
+}
 
 /* ---- Sticky CTA bar (plan + handoff + top-up) ---- */
 .cta-bar {
@@ -1426,14 +1466,6 @@ body {
   border-color: var(--ink);
   color: #fff;
 }
-.chip.rain {
-  border-color: var(--brand);
-  color: var(--brand-ink);
-}
-.chip.rain.active {
-  background: var(--brand);
-  color: #fff;
-}
 .sort-bar {
   display: flex;
   justify-content: space-between;
@@ -1673,56 +1705,6 @@ body {
 .map-sheet-body {
   flex: 1;
   overflow-y: auto;
-}
-
-/* 旅中今日流量儀表（行程分頁） */
-.usage-gauge {
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 12px 14px;
-  margin-bottom: 8px;
-}
-.usage-gauge-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.usage-gauge-title {
-  font-size: 14px;
-  font-weight: 800;
-}
-.usage-gauge-btn {
-  border: none;
-  border-radius: 999px;
-  background: var(--brand);
-  color: #fff;
-  font-family: inherit;
-  font-size: 12px;
-  font-weight: 800;
-  padding: 5px 12px;
-  cursor: pointer;
-}
-.usage-gauge-bar {
-  margin-top: 10px;
-  height: 8px;
-  border-radius: 4px;
-  background: var(--surface);
-  overflow: hidden;
-}
-.usage-gauge-bar i {
-  display: block;
-  height: 100%;
-  border-radius: 4px;
-  background: var(--good);
-}
-.usage-gauge-bar i.short {
-  background: var(--accent);
-}
-.usage-gauge-meta {
-  margin-top: 6px;
-  font-size: 12px;
-  color: var(--ink-2);
 }
 
 /* Transient notice for demo-only entry points */

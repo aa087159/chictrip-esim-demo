@@ -9,9 +9,9 @@ export function MeScreen({ currentId, onPick }: Props) {
   return (
     <div className="me">
       <div className="me-head">
-        <div className="me-avatar">V</div>
+        <div className="me-avatar">零</div>
         <div>
-          <div className="me-name">Vivian</div>
+          <div className="me-name">零食組成</div>
           <div className="me-sub">和泰會員 · 1,240 Points</div>
         </div>
       </div>

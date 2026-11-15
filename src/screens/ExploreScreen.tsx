@@ -3,14 +3,13 @@ import type { Itinerary } from "../lib/api";
 import { SPOTS, type Spot } from "../data/feed";
 import { useDemoToast } from "../lib/useDemoToast";
 
-type Category = "景點" | "收藏" | "美食" | "購物" | "雨天備案";
+type Category = "景點" | "收藏" | "美食" | "購物";
 
 const CATEGORIES: { id: Category; label: string }[] = [
   { id: "景點", label: "景點" },
   { id: "收藏", label: "收藏" },
   { id: "美食", label: "美食" },
   { id: "購物", label: "購物" },
-  { id: "雨天備案", label: "☔ 雨天備案" },
 ];
 
 const MARKER_ICON: Record<Spot["category"], string> = {
@@ -31,7 +30,7 @@ interface Props {
 
 export function ExploreScreen({ itinerary, onOpenNetwork }: Props) {
   const toast = useDemoToast();
-  const [category, setCategory] = useState<Category | null>(null);
+  const [category, setCategory] = useState<Category>("景點");
   const [isMapMode, setIsMapMode] = useState(false);
   const [isListLayout, setIsListLayout] = useState(false);
   const [isSheetExpanded, setIsSheetExpanded] = useState(false);
@@ -39,9 +38,7 @@ export function ExploreScreen({ itinerary, onOpenNetwork }: Props) {
   const [addedIds, setAddedIds] = useState<Set<string>>(new Set());
 
   const spots = SPOTS.filter((s) => {
-    if (category === null) return true;
     if (category === "收藏") return likedIds.has(s.id);
-    if (category === "雨天備案") return s.isIndoor;
     return s.category === category;
   });
 
@@ -147,8 +144,8 @@ export function ExploreScreen({ itinerary, onOpenNetwork }: Props) {
           {CATEGORIES.map((c) => (
             <button
               key={c.id}
-              className={`chip${category === c.id ? " active" : ""}${c.id === "雨天備案" ? " rain" : ""}`}
-              onClick={() => setCategory((cur) => (cur === c.id ? null : c.id))}
+              className={`chip${category === c.id ? " active" : ""}`}
+              onClick={() => setCategory(c.id)}
             >
               {c.label}
             </button>

@@ -18,6 +18,10 @@ const IMG = {
   sushiBoat: "1553621042-f6e147245754",
   fujiSakura: "1490806843957-31f4c9a91c65",
   kyotoYasaka: "1493976040374-85c8e12f0c0e",
+  aquarium: "1703664469482-f2dad87c1704",
+  museumHall: "1757852830467-e15519a12995",
+  artGallery: "1757852659159-b494f618be74",
+  arcade: "1678501512127-0cd403983940",
 } as const;
 
 export type SpotCategory = "景點" | "美食" | "購物";
@@ -27,8 +31,6 @@ export interface Spot {
   name: string;
   city: string;
   category: SpotCategory;
-  // 雨天備案只篩室內景點
-  isIndoor: boolean;
   // 影片卡顯示片長
   videoLength?: string;
   img: string;
@@ -46,7 +48,6 @@ export const SPOTS: Spot[] = [
     name: "淺草寺・雷門散策",
     city: "東京",
     category: "景點",
-    isIndoor: false,
     img: photo(IMG.asakusaShop),
     likes: 3241,
     rating: 4.6,
@@ -58,7 +59,6 @@ export const SPOTS: Spot[] = [
     name: "teamLab Planets 沉浸式光影展",
     city: "東京",
     category: "景點",
-    isIndoor: true,
     videoLength: "0:30",
     img: photo(IMG.neonStreet, 480, 720),
     likes: 2876,
@@ -71,7 +71,6 @@ export const SPOTS: Spot[] = [
     name: "一蘭拉麵 新宿中央東口店",
     city: "東京",
     category: "美食",
-    isIndoor: true,
     img: photo(IMG.ramen),
     likes: 2410,
     rating: 4.3,
@@ -83,7 +82,6 @@ export const SPOTS: Spot[] = [
     name: "SHIBUYA SKY 頂樓夜景",
     city: "東京",
     category: "景點",
-    isIndoor: false,
     videoLength: "0:30",
     img: photo(IMG.shibuyaNight, 480, 720),
     likes: 2265,
@@ -96,7 +94,6 @@ export const SPOTS: Spot[] = [
     name: "築地場外市場 海鮮丼",
     city: "東京",
     category: "美食",
-    isIndoor: false,
     img: photo(IMG.sushiPlate),
     likes: 1987,
     rating: 4.4,
@@ -108,7 +105,6 @@ export const SPOTS: Spot[] = [
     name: "GINZA SIX 選物購物",
     city: "東京",
     category: "購物",
-    isIndoor: true,
     img: photo(IMG.shopping),
     likes: 1754,
     rating: 4.4,
@@ -120,7 +116,6 @@ export const SPOTS: Spot[] = [
     name: "東京鐵塔 夜間點燈",
     city: "東京",
     category: "景點",
-    isIndoor: false,
     img: photo(IMG.tokyoTowerNight, 480, 720),
     likes: 1690,
     rating: 4.5,
@@ -132,7 +127,6 @@ export const SPOTS: Spot[] = [
     name: "新宿思い出橫丁 串燒巡禮",
     city: "東京",
     category: "美食",
-    isIndoor: false,
     img: photo(IMG.izakayaAlley),
     likes: 1532,
     rating: 4.2,
@@ -144,7 +138,6 @@ export const SPOTS: Spot[] = [
     name: "明治神宮 森林參道",
     city: "東京",
     category: "景點",
-    isIndoor: false,
     img: photo(IMG.forestTorii, 480, 720),
     likes: 1418,
     rating: 4.6,
@@ -156,7 +149,6 @@ export const SPOTS: Spot[] = [
     name: "AQUA CiTY 台場購物中心",
     city: "東京",
     category: "購物",
-    isIndoor: true,
     img: photo(IMG.cityDay),
     likes: 1206,
     rating: 4.1,
@@ -168,12 +160,56 @@ export const SPOTS: Spot[] = [
     name: "銀座 迴轉壽司名店",
     city: "東京",
     category: "美食",
-    isIndoor: true,
     img: photo(IMG.sushiBoat),
     likes: 1102,
     rating: 4.5,
     extraGB: 0.2,
     mapPos: { x: 46, y: 30 },
+  },
+  // 以下景點讚數設得比前面的景點低，不影響首頁景點排行前 5 名。
+  {
+    id: "sumida-aquarium",
+    name: "墨田水族館 晴空塔城",
+    city: "東京",
+    category: "景點",
+    img: photo(IMG.aquarium),
+    likes: 1380,
+    rating: 4.5,
+    extraGB: 0.3,
+    mapPos: { x: 80, y: 22 },
+  },
+  {
+    id: "tnm",
+    name: "東京國立博物館 上野",
+    city: "東京",
+    category: "景點",
+    img: photo(IMG.museumHall),
+    likes: 1265,
+    rating: 4.6,
+    extraGB: 0.2,
+    mapPos: { x: 66, y: 12 },
+  },
+  {
+    id: "mori-art",
+    name: "森美術館 六本木新城",
+    city: "東京",
+    category: "景點",
+    img: photo(IMG.artGallery),
+    likes: 1148,
+    rating: 4.4,
+    extraGB: 0.2,
+    mapPos: { x: 36, y: 66 },
+  },
+  {
+    id: "akiba-arcade",
+    name: "秋葉原 電玩遊樂場",
+    city: "東京",
+    category: "景點",
+    img: photo(IMG.arcade),
+    likes: 1036,
+    rating: 4.3,
+    extraGB: 0.4,
+    mapPos: { x: 58, y: 20 },
   },
 ];
 

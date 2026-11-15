@@ -15,7 +15,10 @@ const STATUS_LABEL: Record<InstallStatus, string> = {
 // 示意：主揪在不同時間點看到的旅伴安裝進度（媽媽一直到出發前一晚都還沒裝）。
 const INSTALLED_BY_PHASE: Record<DemoPhase, string[]> = {
   planned: [],
-  d7: ["mei", "zhe"],
+  d14: [],
+  // D-7 與簡報第 17 頁示意圖一致：你、小美已安裝，阿哲、媽媽待安裝。
+  d7: ["me", "mei"],
+  d3: ["me", "mei", "zhe"],
   d1: ["me", "mei", "zhe"],
   traveling: [],
   returned: [],
@@ -53,14 +56,13 @@ export function TeamScreen({ cards, phase, onOpenActivation, onBack }: Props) {
       return;
     }
     if (status !== "pending") return;
-    if (member.style === "light") toast.show(`已用 LINE 傳圖文安裝教學給${member.name}（示意）`);
-    else toast.show(`已用 LINE 把 QR Code 分享給${member.name}（示意）`);
+    toast.show(`已用 LINE 把 QR Code 和圖文安裝教學傳給${member.name}（示意）`);
   }
 
   function actionLabel(card: TeamCard, status: InstallStatus): string | null {
     if (card.member.isOrganizer) return status === "pending" ? "安裝到這支手機" : "開通檢查";
     if (status !== "pending") return null;
-    return card.member.style === "light" ? "傳圖文教學" : "LINE 分享";
+    return "LINE 傳 QR＋教學";
   }
 
   return (

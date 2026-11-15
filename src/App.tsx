@@ -15,6 +15,7 @@ import { ExploreScreen } from "./screens/ExploreScreen";
 import type { DemoAction, DemoPhase } from "./data/demo-phase";
 import { CompanionScreen } from "./screens/CompanionScreen";
 import { getCompanionScenario } from "./data/companion-scenarios";
+import { useDemoToast } from "./lib/useDemoToast";
 
 // Keep the "AI thinking" animation visible even when the API answers instantly
 // (mock / cached responses), so the reveal feels earned. Tunable for demos.
@@ -54,6 +55,9 @@ export function App() {
   const [handoff, setHandoff] = useState<Handoff | null>(null);
   // Demo 時間切換器的目前時間點，驅動首頁狀態卡、通知中心與全團安裝進度
   const [phase, setPhase] = useState<DemoPhase>("planned");
+  // 行程定案後才出現上網推薦；排到一半不跳推薦卡。
+  const [isTripConfirmed, setIsTripConfirmed] = useState(false);
+  const toast = useDemoToast();
 
   const persona = PERSONAS.find((p) => p.id === personaId) ?? PERSONAS[0];
   const { itinerary } = persona;
@@ -110,6 +114,11 @@ export function App() {
     setTab("trip");
   }
   function goToNetwork() {
+    if (!isTripConfirmed) {
+      openInTrip("trip");
+      toast.show("先確定行程，AI 才會幫你配網路");
+      return;
+    }
     if (purchased) {
       openInTrip("team");
       return;
@@ -140,6 +149,7 @@ export function App() {
 
   function pickPersona(p: Persona) {
     setPersonaId(p.id);
+    setIsTripConfirmed(false);
     setRecommendation(null);
     setPlanOverrides({});
     setPurchased(null);
@@ -230,8 +240,11 @@ export function App() {
           <TripScreen
             itinerary={itinerary}
             networkPlanName={purchased ? `${Object.keys(purchased).length} 張 eSIM` : null}
+            isConfirmed={isTripConfirmed}
+            onConfirm={() => setIsTripConfirmed(true)}
             onOpenNetwork={openNetwork}
-            onOpenCompanion={() => push("companion")}
+            isTraveling={purchased !== null && phase === "traveling"}
+            onOpenTopUp={() => push("topup")}
           />
         );
     }
@@ -268,6 +281,7 @@ export function App() {
       <div className="screen-view" key={viewKey}>
         {renderTab()}
       </div>
+      {toast.message && <div className="toast">{toast.message}</div>}
     </PhoneShell>
   );
 }

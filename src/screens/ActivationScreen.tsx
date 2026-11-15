@@ -58,6 +58,7 @@ export function ActivationScreen({ device, onBack }: Props) {
           <small>
             ✓ 你的 {device} 支援 eSIM・已完成 {doneCount} / {CHECKS.length}
           </small>
+          <small>前一晚只是安裝，到當地連上網那天才開始算天數</small>
         </div>
 
         {CHECKS.map((c, i) => {

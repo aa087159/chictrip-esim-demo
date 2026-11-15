@@ -1,20 +1,27 @@
 import type { Itinerary } from "../lib/api";
 import { flagOf } from "../lib/format";
-import { UsageGauge } from "../components/UsageGauge";
 
 interface Props {
   itinerary: Itinerary;
   // 已配好的方案名稱；null 表示還沒產生「上網」章節。
   networkPlanName: string | null;
+  // 行程定案前不提供上網推薦入口，只顯示「行程確定」。
+  isConfirmed: boolean;
+  onConfirm: () => void;
   onOpenNetwork: () => void;
-  onOpenCompanion: () => void;
+  // 已購買且 Demo 時間在旅中，才顯示旅中的加買入口。
+  isTraveling: boolean;
+  onOpenTopUp: () => void;
 }
 
 export function TripScreen({
   itinerary,
   networkPlanName,
+  isConfirmed,
+  onConfirm,
   onOpenNetwork,
-  onOpenCompanion,
+  isTraveling,
+  onOpenTopUp,
 }: Props) {
   const { destination, countryCode, days, travelers, dateRange, companions, dayPlan } =
     itinerary;
@@ -70,31 +77,41 @@ export function TripScreen({
             <span className="sec-label">花費</span>
             <span className="sec-status done">已估算</span>
           </div>
-          <button
-            className={`sec-row net${networkPlanName ? " ready" : " cta"}`}
-            onClick={onOpenNetwork}
-          >
-            <span className="sec-ic">📶</span>
-            <span className="sec-label">
-              上網
-              <small>
-                {networkPlanName ? `已配好・${networkPlanName}` : "AI 幫你配這趟的 eSIM"}
-              </small>
-            </span>
-            <span className="sec-go">{networkPlanName ? "✓" : "→"}</span>
-          </button>
+          {isConfirmed ? (
+            <button
+              className={`sec-row net${networkPlanName ? " ready" : " cta"}`}
+              onClick={onOpenNetwork}
+            >
+              <span className="sec-ic">📶</span>
+              <span className="sec-label">
+                上網
+                <small>
+                  {networkPlanName ? `已配好・${networkPlanName}` : "AI 幫你配這趟的 eSIM"}
+                </small>
+              </span>
+              <span className="sec-go">{networkPlanName ? "✓" : "→"}</span>
+            </button>
+          ) : (
+            <button className="sec-row net cta" onClick={onConfirm}>
+              <span className="sec-ic">✅</span>
+              <span className="sec-label">
+                行程確定
+                <small>確定後 AI 幫你配這趟的 eSIM</small>
+              </span>
+              <span className="sec-go">→</span>
+            </button>
+          )}
         </div>
       </div>
 
-      {networkPlanName && (
+      {isTraveling && (
         <div className="trip-section">
           <div className="trip-section-h">旅途中</div>
-          <UsageGauge onTopUp={onOpenNetwork} />
-          <button className="alert-card" onClick={onOpenCompanion}>
-            <span className="alert-ic">⛈️</span>
+          <button className="alert-card" onClick={onOpenTopUp}>
+            <span className="alert-ic">🗓️</span>
             <span className="alert-body">
-              <span className="alert-title">大雨提醒</span>
-              <span className="alert-sub">你的行程可能受影響，AI 幫你想 Plan B</span>
+              <span className="alert-title">行程有變動？</span>
+              <span className="alert-sub">AI 依新的行程，幫你看全團的網卡還夠不夠</span>
             </span>
             <span className="alert-go">→</span>
           </button>
