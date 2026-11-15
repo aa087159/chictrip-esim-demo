@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>去趣 eSIM · 會員</title>
+  <!-- Tailwind Play CDN（只用來在瀏覽器直接預覽）。併進專案時改用專案自己的 Tailwind，主題色見 README.md。 -->
+  <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ink: { DEFAULT: "#1c202b", 2: "rgb(28 32 43 / 0.72)", 3: "rgb(28 32 43 / 0.5)" },
+            brand: { DEFAULT: "#089cf7", ink: "#0577c2", soft: "#e7f4fe" },
+            accent: { DEFAULT: "#f5a623", ink: "#b9740a", soft: "#fff4e2" },
+            surface: "#f2f4f8",
+            canvas: "#f6f8fb",
+            card: "#ffffff",
+            line: "#e7ecf3",
+            good: { DEFAULT: "#17b26a", soft: "#e4f7ee" },
+          },
+          boxShadow: {
+            "card-sm": "0 1px 2px rgba(28, 32, 43, 0.06)",
+            card: "0 12px 30px rgba(28, 32, 43, 0.1)",
+            "card-lg": "0 18px 44px rgba(8, 156, 247, 0.18)",
+          },
+          fontFamily: {
+            sans: ["Inter", '"Noto Sans TC"', '"SF Pro Display"', '"Microsoft JhengHei"', "-apple-system", "sans-serif"],
+          },
+        },
+      },
+    };
+  </script>
+</head>
+<body class="bg-canvas font-sans text-ink antialiased">
+  <div class="relative mx-auto flex min-h-dvh max-w-[480px] flex-col bg-canvas">
+    <!-- 示意資料標籤：固定在畫面右上角 -->
+    <div class="pointer-events-none sticky top-0 z-40 h-0">
+      <span class="absolute right-2 top-2 rounded-full border border-line bg-white/85 px-[7px] py-0.5 text-[10px] font-bold text-ink-3">示意資料</span>
+    </div>
+
+    <main class="flex-1 px-4 py-5">
+      <div class="flex items-center gap-3.5 px-1 pb-5 pt-1">
+        <div class="grid h-[54px] w-[54px] place-items-center rounded-full bg-gradient-to-br from-[#46bcff] to-brand text-2xl font-extrabold text-white">零</div>
+        <div>
+          <div class="text-[17px] font-extrabold">零食組成</div>
+          <div class="text-[12.5px] font-bold text-accent-ink">和泰會員 · 1,240 Points</div>
+        </div>
+      </div>
+
+      <!-- 切換示範行程：預設選東京；換行程後 AI 推薦會跟著變 -->
+      <div class="mx-1 mb-2.5 mt-2 text-xs font-extrabold text-ink-3">切換示範行程</div>
+      <div class="flex flex-col gap-2">
+        <button class="flex w-full items-center gap-[13px] rounded-[14px] border-[1.5px] border-brand bg-brand-soft px-3.5 py-[13px] text-left">
+          <span class="grid h-10 w-10 flex-none place-items-center rounded-[11px] bg-white text-[21px]">🚗</span>
+          <span class="flex min-w-0 flex-1 flex-col gap-0.5">
+            <b class="text-sm font-bold">東京 5 天・4 人：樂園＋富士山自駕</b>
+            <small class="text-xs text-ink-3">迪士尼一整天、租車去河口湖和箱根</small>
+          </span>
+          <span class="text-base font-extrabold text-brand">✓</span>
+        </button>
+        <button class="flex w-full items-center gap-[13px] rounded-[14px] border-[1.5px] border-line bg-card px-3.5 py-[13px] text-left hover:border-brand">
+          <span class="grid h-10 w-10 flex-none place-items-center rounded-[11px] bg-surface text-[21px]">♨️</span>
+          <span class="flex min-w-0 flex-1 flex-col gap-0.5">
+            <b class="text-sm font-bold">關西 5 天・4 人：寺院＋溫泉慢旅</b>
+            <small class="text-xs text-ink-3">電車移動，一晚住有馬溫泉旅館</small>
+          </span>
+        </button>
+      </div>
+      <div class="mx-1 mt-3.5 text-[11.5px] leading-[1.6] text-ink-3">Demo：同樣 4 個人換一份行程，AI 推薦的方案就不一樣</div>
+    </main>
+
+    <!-- 底部分頁列（四頁共用）：目前在「會員」 -->
+    <nav class="sticky bottom-0 z-30 flex border-t border-line bg-card pb-[calc(4px+env(safe-area-inset-bottom))]">
+      <a href="home.html" class="flex flex-1 flex-col items-center gap-[3px] pb-[7px] pt-[9px] text-ink-3">
+        <span class="text-[20px] leading-none opacity-60 grayscale-[0.6]">🏠</span>
+        <span class="text-[10.5px] font-bold">首頁</span>
+      </a>
+      <a href="explore.html" class="flex flex-1 flex-col items-center gap-[3px] pb-[7px] pt-[9px] text-ink-3">
+        <span class="text-[20px] leading-none opacity-60 grayscale-[0.6]">🧭</span>
+        <span class="text-[10.5px] font-bold">探索</span>
+      </a>
+      <a href="#trip" class="flex flex-1 flex-col items-center gap-[3px] pb-[7px] pt-[9px] text-ink-3">
+        <span class="text-[20px] leading-none opacity-60 grayscale-[0.6]">🗺️</span>
+        <span class="text-[10.5px] font-bold">行程</span>
+      </a>
+      <a href="me.html" class="flex flex-1 flex-col items-center gap-[3px] pb-[7px] pt-[9px] text-brand-ink">
+        <span class="-translate-y-px text-[20px] leading-none">👤</span>
+        <span class="text-[10.5px] font-bold">會員</span>
+      </a>
+    </nav>
+  </div>
+</body>
+</html>
